@@ -1,0 +1,23 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.dodo.flutterbridge">
+
+    <application tools:node="merge">
+        <activity
+            android:name="com.idlefish.flutterboost.containers.FlutterBoostActivity"
+            android:theme="@style/Theme.AppCompat"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize" >
+
+            <meta-data
+                android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
+                android:value="true"/>
+
+            <meta-data
+                android:name="io.flutter.embedding.android.SplashScreenDrawable"
+                android:resource="@drawable/bg_flutter_drawable"/>
+        </activity>
+    </application>
+
+</manifest>

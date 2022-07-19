@@ -1,0 +1,31 @@
+name: flutter_bridge
+description: A Flutter module for interaction between flutter and native.
+version: 0.0.1
+author: dodo
+homepage: https://github.com/xxx
+
+environment:
+  sdk: '>=2.18.0-228.0.dev <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_boost:
+    git:
+      url: 'https://github.com/258223433/flutter_boost.git'
+      ref: 'v3.0-null-safety-flutter3.0-release.2.1'
+
+dev_dependencies:
+  flutter_lints: ^1.0.4
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.dodo.flutterbridge
+        pluginClass: FlutterBridgePlugin
+      ios:
+        pluginClass: FlutterBridgePlugin
+

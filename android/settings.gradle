@@ -1,0 +1,2 @@
+rootProject.name = 'flutter_bridge'
+include ':flutter_boost'
