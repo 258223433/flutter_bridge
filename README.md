@@ -1,6 +1,6 @@
 # flutter_bridge
 
-A new Flutter module project.
+A Flutter module for interaction between flutter and native.
 
 ## Getting Started
 
