@@ -11,23 +11,23 @@ import io.flutter.plugin.common.MethodChannel
  *     desc   : 可以和flutter交互的LiveData
  *     version: 1.0
  */
-class FlutterLiveData<T>(owner: LifecycleOwner, val info: FlutterDataInfo) :
+class FlutterLiveData<T>(owner: LifecycleOwner, val name: String) :
     LiveData<T>(),
     OnCallObserver {
     private val channel = FlutterContext.globalChannel
 
     init {
-        channel.addObserver(info.dataName, this)
+        channel.addObserver(name, this)
 
         owner.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
-                channel.removeObserver(info.dataName)
+                channel.removeObserver(name)
                 owner.lifecycle.removeObserver(this)
             }
         })
     }
 
-    constructor(owner: LifecycleOwner,  info: FlutterDataInfo, value: T ):this(owner, info){
+    constructor(owner: LifecycleOwner,  name: String, value: T ):this(owner, name){
         setValue(value)
     }
 
@@ -42,7 +42,7 @@ class FlutterLiveData<T>(owner: LifecycleOwner, val info: FlutterDataInfo) :
     }
 
     private fun setFlutterValue(value: T?) {
-        channel.invokeMethod(info.dataName, value)
+        channel.invokeMethod(name, value)
     }
 
     override fun onCall(data: Any?): Any? {

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.*
  */
 class FlutterStateFlow<T>(
     owner: LifecycleOwner,
-    val info: FlutterDataInfo,
+    val name: String,
     initialState: T,
     private val delegate: MutableStateFlow<T> = MutableStateFlow(initialState),
 ) : MutableStateFlow<T> by delegate,OnCallObserver {
@@ -22,11 +22,11 @@ class FlutterStateFlow<T>(
     private val channel = FlutterContext.globalChannel
 
     init {
-        channel.addObserver(info.dataName, this)
+        channel.addObserver(name, this)
 
         owner.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
-                channel.removeObserver(info.dataName)
+                channel.removeObserver(name)
                 owner.lifecycle.removeObserver(this)
             }
         })
@@ -48,7 +48,7 @@ class FlutterStateFlow<T>(
     }
 
     private fun setFlutterValue(value: T?) {
-        channel.invokeMethod(info.dataName, value)
+        channel.invokeMethod(name, value)
     }
 
     override fun onCall(data: Any?): Any? {
