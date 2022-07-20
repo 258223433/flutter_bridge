@@ -8,6 +8,7 @@ import com.idlefish.flutterboost.FlutterBoostDelegate
 import com.idlefish.flutterboost.FlutterBoostPlugin
 import com.idlefish.flutterboost.FlutterBoostRouteOptions
 import com.idlefish.flutterboost.containers.FlutterBoostActivity
+import com.idlefish.flutterboost.containers.FlutterBoostFragment
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -19,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  *     version: 1.0
  */
 
-object FlutterInitializer {
+object FlutterBridge {
 
     /**
      * 防止多次初始化
@@ -38,7 +39,7 @@ object FlutterInitializer {
      * @param onInit Function0<Unit>? 初始化成功后调用
      * @return FlutterInitializer
      */
-    fun init(context: Application, onInit: (() -> Unit)? = null): FlutterInitializer {
+    fun init(context: Application, onInit: (() -> Unit)? = null): FlutterBridge {
         if (hasInit.compareAndSet(false, true)) {
             FlutterBoost.instance().setup(context, object : FlutterBoostDelegate {
                 override fun pushNativeRoute(options: FlutterBoostRouteOptions) {
@@ -78,6 +79,15 @@ object FlutterInitializer {
      */
     fun registerRoute(router: (currentActivity: Activity, options: FlutterRouteOptions) -> Unit) {
         routeList.add(router)
+    }
+
+
+    fun activity(): ActivityBuilder<Nothing> {
+        return BaseBuilder.activity()
+    }
+
+    fun <F : FlutterBoostFragment> fragment(): FragmentBuilder<F, Nothing> {
+        return BaseBuilder.fragment<F>()
     }
 }
 

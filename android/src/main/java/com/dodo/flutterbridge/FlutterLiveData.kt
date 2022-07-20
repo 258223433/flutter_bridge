@@ -41,15 +41,13 @@ class FlutterLiveData<T>(owner: LifecycleOwner, val name: String) :
         super.setValue(value)
     }
 
-    private fun setFlutterValue(value: T?) {
+    private fun setFlutterValue(value: T) {
         channel.invokeMethod(name, value)
     }
 
     override fun onCall(data: Any?): Any? {
         Log.d("dodo", "${Thread.currentThread()}->$data")
-        data?.apply {
-            super.setValue(this as T)
-        }
+        super.setValue(data as T)
         return null
     }
 }

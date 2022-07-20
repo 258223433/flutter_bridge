@@ -13,19 +13,7 @@ import java.lang.reflect.Type
  *     version: 1.0
  */
 
-
 class FlutterRouter internal constructor(private val builder: BaseBuilder) {
-
-    companion object {
-
-        fun activity(): ActivityBuilder<Nothing> {
-            return BaseBuilder.activity()
-        }
-
-        fun <F : FlutterBoostFragment> fragment(): FragmentBuilder<F, Nothing> {
-            return BaseBuilder.fragment<F>()
-        }
-    }
 
     fun <C> navigateActivity(caller: C?): FlutterActivityRouterInfo<C> {
         val options = FlutterBoostRouteOptions.Builder()
