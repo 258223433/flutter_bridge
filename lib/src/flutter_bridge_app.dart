@@ -9,12 +9,12 @@ import 'package:flutter/widgets.dart';
 
 class FlutterBridgeApp extends FlutterBoostApp{
 
-  static final Map<String, FlutterBoostRouteFactory> routerMap = {};
+  static Map<String, FlutterBoostRouteFactory> routerMap = {};
 
-  static Route<dynamic>? routeFactory(RouteSettings settings, String? uniqueId) {
+  static Route<dynamic>? _routeFactory(RouteSettings settings, String? uniqueId) {
     FlutterBoostRouteFactory? func = routerMap[settings.name];
     return func!=null? func(settings, uniqueId):null;
   }
 
-  FlutterBridgeApp({super.key,super.appBuilder,super.initialRoute,super.interceptors}) : super(routeFactory);
+  FlutterBridgeApp({super.key,super.appBuilder,super.initialRoute,super.interceptors}) : super(_routeFactory);
 }
