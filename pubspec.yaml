@@ -5,7 +5,7 @@ author: dodo
 homepage: https://github.com/258223433/flutter_bridge
 
 environment:
-  sdk: '>=2.18.0-228.0.dev <3.0.0'
+  sdk: '>=2.2.2 <3.0.0'
 
 dependencies:
   flutter:
