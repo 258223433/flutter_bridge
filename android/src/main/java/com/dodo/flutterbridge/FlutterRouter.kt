@@ -13,7 +13,7 @@ import java.lang.reflect.Type
  *     version: 1.0
  */
 
-class FlutterRouter internal constructor(private val builder: BaseBuilder) {
+internal class FlutterRouter internal constructor(private val builder: BaseBuilder) {
 
     fun <C> navigateActivity(caller: C?): FlutterActivityRouterInfo<C> {
         val options = FlutterBoostRouteOptions.Builder()

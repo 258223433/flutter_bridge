@@ -8,7 +8,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.dodo.flutterbridge.FlutterRouter
+import com.dodo.flutterbridge.FlutterBridge
 import com.dodo.flutterbridge.example.databinding.ActivityMainBinding
 
 
@@ -36,9 +36,9 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
 
             val arguments = HashMap<String, Any>()
-            arguments["data"] = "setting"
-            FlutterRouter.Companion.activity()
-                .pageName("simplePage")
+            arguments["data"] = "arguments form native"
+            FlutterBridge.activity()
+                .pageName("mainPage")
                 .arguments(arguments)
                 .navigate()
         }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boost/flutter_boost.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bridge/flutter_bridge.dart';
 ///   author : liuduo
 ///   e-mail : liuduo@gyenno.com
 ///   time   : 2022/07/20
-///   desc   :
+///   desc   : Bridge的app，把路由的注册放到初始化里[FlutterBridge]
 ///   version: 1.0
 
 class FlutterBridgeApp extends FlutterBoostApp{

@@ -23,6 +23,11 @@ import java.util.concurrent.atomic.AtomicBoolean
 object FlutterBridge {
 
     /**
+     * flutter的上下文信息
+     */
+    val flutterContext = FlutterContext
+
+    /**
      * 防止多次初始化
      */
     private val hasInit = AtomicBoolean(false)
@@ -59,7 +64,7 @@ object FlutterBridge {
                         .url(options.pageName())
                         .urlParams(options.arguments())
                         .build(FlutterBoost.instance().currentActivity())
-                    FlutterBoost.instance().currentActivity().startActivity(intent)
+                    FlutterBoost.instance().currentActivity().startActivityForResult(intent,options.requestCode())
                 }
             }) { engine ->
                 FlutterContext.globalEngine = engine

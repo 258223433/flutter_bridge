@@ -3,6 +3,7 @@ package com.dodo.flutterbridge
 import android.util.Log
 import androidx.lifecycle.*
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.MainScope
 
 /**
  *     author : liuduo
@@ -11,15 +12,15 @@ import io.flutter.plugin.common.MethodChannel
  *     desc   : 可以和flutter交互的LiveData
  *     version: 1.0
  */
-class FlutterLiveData<T>(owner: LifecycleOwner, val name: String) :
+class FlutterLiveData<T>(owner: LifecycleOwner?, private val name: String) :
     LiveData<T>(),
     OnCallObserver {
-    private val channel = FlutterContext.globalChannel
+    private val channel:FlutterMethodChannel = FlutterContext.globalChannel
 
     init {
         channel.addObserver(name, this)
 
-        owner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+        owner?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 channel.removeObserver(name)
                 owner.lifecycle.removeObserver(this)
@@ -27,7 +28,7 @@ class FlutterLiveData<T>(owner: LifecycleOwner, val name: String) :
         })
     }
 
-    constructor(owner: LifecycleOwner,  name: String, value: T ):this(owner, name){
+    constructor(owner: LifecycleOwner?,  name: String, value: T ):this(owner, name){
         setValue(value)
     }
 
