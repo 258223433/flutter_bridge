@@ -12,7 +12,7 @@ import 'package:flutter_bridge/flutter_bridge.dart';
 
 void main() {
   test("testInit", () async {
-    FlutterBridge.instace().init();
+    FlutterBridge.instance().init();
   });
 
   // testWidgets('Counter increments smoke test', (WidgetTester tester) async {

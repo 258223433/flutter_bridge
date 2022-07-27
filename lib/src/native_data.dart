@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bridge/flutter_bridge.dart';
 import 'package:flutter_bridge/src/flutter_context.dart';
 import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
 
@@ -11,13 +10,13 @@ import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
 ///todo 数据粘性
 class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
   String name;
-  final channel = FlutterContext.instace().globalChannel;
+  final _channel = FlutterContext.instace().globalChannel;
 
   NativeData(this.name, super.value) {
     if (value != null) {
       _setNativeValue(value);
     }
-    channel.addObserver(name, this);
+    _channel.addObserver(name, this);
   }
 
   @override
@@ -32,7 +31,7 @@ class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
   }
 
   void _setNativeValue(T value) {
-    channel.invokeMethod(name, value);
+    _channel.invokeMethod(name, value);
   }
 
   @override

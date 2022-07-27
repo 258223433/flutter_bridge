@@ -5,7 +5,7 @@ import 'package:flutter_boost/flutter_boost.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  FlutterBridge.instace().init().registerRoute({
+  FlutterBridge.instance().init().registerRoute({
     '/': (settings, uniqueId) {
       return CupertinoPageRoute(
           settings: settings,
@@ -145,24 +145,29 @@ class SimplePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ChangeNotifierProvider<NativeData<int>>(
-              create: (_) => NativeData("count", 0),
-              child:  Consumer<NativeData<int>>(
-                builder: (context, notifier, child) {
-                  return Text("${notifier.value}");
-                },
+            ChangeNotifierProvider<NativeData<int?>>(
+              create: (_) => NativeData("count", null),
+              child:  Column(
+                children: [
+                  Consumer<NativeData<int?>>(
+                    builder: (context, notifier, child) {
+                      return Text("${notifier.value}");
+                    },
+                  ),
+                  Consumer<NativeData<int?>>(
+                    builder: (context, notifier, child) {
+                      return TextButton(
+                          onPressed: () {
+                             notifier.value = (notifier.value ?? 0) +100;
+                          },
+                          child: const Text('+100'),
+                        );
+                    },
+                  ),
+                ],
               ),
             ),
-            // Consumer<NativeData<int>>(
-            //   builder: (context, notifier, child) {
-            //     return TextButton(
-            //         onPressed: () {
-            //
-            //         },
-            //         child: const Text('+100'),
-            //       );
-            //   },
-            // ),
+
             Text('SimplePage $data'),
             TextButton(
               onPressed: () {
