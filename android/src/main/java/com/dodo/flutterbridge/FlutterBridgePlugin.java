@@ -16,11 +16,9 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 public class FlutterBridgePlugin implements FlutterPlugin {
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
-        binding.getFlutterEngine().getPlugins().add(new FlutterBoostPlugin());
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        binding.getFlutterEngine().getPlugins().remove(FlutterBoostPlugin.class);
     }
 }
