@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bridge/src/flutter_context.dart';
 import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
 class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
   String name;
   final _channel = FlutterContext.instace().globalChannel;
+  List<Completer<T>> completerList = [];
 
   NativeData(this.name, super.value) {
     if (value != null) {
@@ -38,5 +41,26 @@ class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
   onCall(data) {
     print("zzyy onCall");
     super.value = data;
+  }
+
+  @override
+  notifyListeners(){
+    super.notifyListeners();
+    for (var element in completerList) {
+      element.complete(value);
+    }
+    completerList.clear();
+  }
+
+  ///获取一个非空的value
+  ///如果没有则等待一个新value的到来
+  Future<T> requireValue() async {
+    if (value == null) {
+      Completer<T> completer = Completer();
+      completerList.add(completer);
+      return completer.future;
+    } else {
+      return Future.value(value);
+    }
   }
 }
