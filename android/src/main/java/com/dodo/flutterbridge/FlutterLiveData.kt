@@ -1,5 +1,6 @@
 package com.dodo.flutterbridge
 
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.*
 import io.flutter.plugin.common.MethodChannel
@@ -15,7 +16,7 @@ import kotlinx.coroutines.MainScope
 class FlutterLiveData<T>(owner: LifecycleOwner?, private val name: String) :
     LiveData<T>(),
     OnCallObserver {
-    private val channel:FlutterMethodChannel = FlutterContext.globalChannel
+    private val channel: FlutterMethodChannel = FlutterContext.globalChannel
 
     init {
         channel.addObserver(name, this)
@@ -28,8 +29,12 @@ class FlutterLiveData<T>(owner: LifecycleOwner?, private val name: String) :
         })
     }
 
-    constructor(owner: LifecycleOwner?,  name: String, value: T ):this(owner, name){
-        setValue(value)
+    constructor(owner: LifecycleOwner?, name: String, value: T) : this(owner, name) {
+        if (Looper.getMainLooper().thread == Thread.currentThread()) {
+            setValue(value)
+        }else{
+            postValue(value)
+        }
     }
 
     public override fun postValue(value: T) {
