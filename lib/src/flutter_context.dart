@@ -8,13 +8,13 @@ import 'package:flutter_bridge/src/flutter_channel.dart';
 ///   version: 1.0
 class FlutterContext{
   static const globalFlutterChannelName = "global_flutter_channel";
-  late final FlutterChannle globalChannel;
+  late final FlutterChannel globalChannel;
 
   FlutterContext._() ;
 
   static final FlutterContext _instance = FlutterContext._();
 
-  factory FlutterContext.instace() {
+  factory FlutterContext.instance() {
     return _instance;
   }
 }

@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.*
  *     version: 1.0
  */
 class FlutterStateFlow<T>(
-    owner: LifecycleOwner,
     val name: String,
     initialState: T,
     private val delegate: MutableStateFlow<T> = MutableStateFlow(initialState),
+    owner: LifecycleOwner?=null,
 ) : MutableStateFlow<T> by delegate,OnCallObserver {
 
     private val channel = FlutterContext.globalChannel
@@ -24,9 +24,9 @@ class FlutterStateFlow<T>(
     init {
         channel.addObserver(name, this)
 
-        owner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+        owner?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
-                channel.removeObserver(name)
+                channel.removeObserver(name,this@FlutterStateFlow)
                 owner.lifecycle.removeObserver(this)
             }
         })
@@ -57,5 +57,10 @@ class FlutterStateFlow<T>(
             delegate.value = this as T
         }
         return null
+    }
+
+    fun dispose() {
+        channel.removeObserver(name,this)
+        Log.d("dodo", "dispose")
     }
 }

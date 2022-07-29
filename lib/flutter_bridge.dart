@@ -11,7 +11,7 @@ export 'src/native_data.dart';
 export 'src/flutter_bridge_app.dart';
 
 class FlutterBridge {
-  var flutterContext = FlutterContext.instace();
+  var flutterContext = FlutterContext.instance();
 
   FlutterBridge._();
 
@@ -19,7 +19,7 @@ class FlutterBridge {
 
   FlutterBridge init() {
     _FlutterBridgeBinding();
-    FlutterContext.instace().globalChannel = FlutterChannle(FlutterContext.globalFlutterChannelName);
+    FlutterContext.instance().globalChannel = FlutterChannel(FlutterContext.globalFlutterChannelName);
     return this;
   }
 

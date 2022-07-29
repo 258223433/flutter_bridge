@@ -3,8 +3,6 @@ package com.dodo.flutterbridge
 import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.*
-import io.flutter.plugin.common.MethodChannel
-import kotlinx.coroutines.MainScope
 
 /**
  *     author : liuduo
@@ -13,7 +11,7 @@ import kotlinx.coroutines.MainScope
  *     desc   : 可以和flutter交互的LiveData
  *     version: 1.0
  */
-class FlutterLiveData<T>(owner: LifecycleOwner?, private val name: String) :
+class FlutterLiveData<T>(private val name: String, owner: LifecycleOwner?=null) :
     LiveData<T>(),
     OnCallObserver {
     private val channel: FlutterMethodChannel = FlutterContext.globalChannel
@@ -23,13 +21,13 @@ class FlutterLiveData<T>(owner: LifecycleOwner?, private val name: String) :
 
         owner?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
-                channel.removeObserver(name)
+                channel.removeObserver(name,this@FlutterLiveData)
                 owner.lifecycle.removeObserver(this)
             }
         })
     }
 
-    constructor(owner: LifecycleOwner?, name: String, value: T) : this(owner, name) {
+    constructor(name: String, value: T,owner: LifecycleOwner?=null) : this( name,owner) {
         if (Looper.getMainLooper().thread == Thread.currentThread()) {
             setValue(value)
         }else{
@@ -55,5 +53,10 @@ class FlutterLiveData<T>(owner: LifecycleOwner?, private val name: String) :
         Log.d("dodo", "${Thread.currentThread()}->$data")
         super.setValue(data as T)
         return null
+    }
+
+    fun dispose() {
+        channel.removeObserver(name,this)
+        Log.d("dodo", "dispose")
     }
 }

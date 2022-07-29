@@ -12,26 +12,45 @@ import java.lang.ref.WeakReference
  *     version: 1.0
  */
 internal class FlutterMethodCallHandler : MethodChannel.MethodCallHandler {
-    private val observers = mutableMapOf<String, WeakReference<OnCallObserver>>()
+    private val observers = mutableMapOf<String, MutableList<WeakReference<OnCallObserver>>>()
 
 
     // TODO: 监听的泛型
     fun addObserver(name: String, observer: OnCallObserver) {
-        observers[name] = WeakReference(observer)
+        var list = observers[name]
+        if (list == null) {
+            list = mutableListOf()
+            observers[name] = list
+        }
+        list.add(WeakReference(observer))
     }
 
-    fun removeObserver(name: String) {
-        observers.remove(name)
+    fun removeObserver(name: String, observer: OnCallObserver) {
+        var list = observers[name]
+        list?.forEach {
+            if (it.get()?.equals(observer) == true) {
+                list.remove(it)
+            }
+        }
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         // TODO: 数据解析adapter看在哪里处理
         try {
-            val observer = observers[call.method]?.get()
-            if (observer == null) {
+
+            val list = observers[call.method]
+            if (list.isNullOrEmpty()) {
                 result.notImplemented()
             } else {
-                result.success(observer.onCall(call.arguments))
+                val get = list[0].get()
+                if (list.size == 1 && get != null) {
+                    result.success(get.onCall(call.arguments))
+                } else {
+                    list.forEach {
+                        it.get()?.onCall(call.arguments)
+                    }
+                    result.success(null)
+                }
             }
         } catch (e: Throwable) {
             result.error("android业务异常", e.toString(), null)

@@ -6,15 +6,15 @@ import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
 ///   time   : 2022/07/21
 ///   desc   :
 ///   version: 1.0
-class FlutterChannle {
+class FlutterChannel {
   late MethodChannel delegate;
   late FlutterMethodCallHandler flutterMethodCallHandler;
 
-  FlutterChannle(String channelName) {
+  FlutterChannel(String channelName) {
     delegate = MethodChannel(channelName);
     flutterMethodCallHandler = FlutterMethodCallHandler();
     delegate.setMethodCallHandler(flutterMethodCallHandler.methodCallHandler);
-    print("zzyy FlutterChannle init");
+    print("flutter_bridge FlutterChannel init");
   }
 
   Future<T?> invokeMethod<T>(String method, [dynamic arguments]) {
@@ -25,7 +25,7 @@ class FlutterChannle {
     flutterMethodCallHandler.addObserver(name, observer);
   }
 
-  void removeObserver(String name) {
-    flutterMethodCallHandler.removeObserver(name);
+  void removeObserver(String name, OnCallObserver observer) {
+    flutterMethodCallHandler.removeObserver(name,observer);
   }
 }

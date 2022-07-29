@@ -12,7 +12,7 @@ import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
 ///todo 数据粘性
 class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
   String name;
-  final _channel = FlutterContext.instace().globalChannel;
+  final _channel = FlutterContext.instance().globalChannel;
   List<Completer<T>> completerList = [];
 
   NativeData(this.name, super.value) {
@@ -30,7 +30,10 @@ class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
 
   @override
   void dispose() {
+    _channel.removeObserver(name, this);
+    completerList.clear();
     super.dispose();
+    print("flutter_bridge NativeData dispose");
   }
 
   void _setNativeValue(T value) {
@@ -39,7 +42,7 @@ class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
 
   @override
   onCall(data) {
-    print("zzyy onCall");
+    print("flutter_bridge NativeData onCall");
     super.value = data;
   }
 

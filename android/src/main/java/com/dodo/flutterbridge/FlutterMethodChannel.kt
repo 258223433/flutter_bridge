@@ -30,7 +30,7 @@ class FlutterMethodChannel(engine: FlutterEngine, channelName: String) {
         flutterMethodCallHandler.addObserver(name, observer)
     }
 
-    fun removeObserver(name: String) {
-        flutterMethodCallHandler.removeObserver(name)
+    fun removeObserver(name: String,observer: OnCallObserver) {
+        flutterMethodCallHandler.removeObserver(name,observer)
     }
 }

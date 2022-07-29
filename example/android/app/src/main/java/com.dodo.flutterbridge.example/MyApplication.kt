@@ -19,7 +19,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         FlutterBridge.init(this){
-            count = FlutterLiveData(null,"count",0)
+            count = FlutterLiveData("count",0)
             thread {
                 repeat(1000){
                     Thread.sleep(1000)
@@ -27,7 +27,6 @@ class MyApplication : Application() {
                 }
             }
         }.registerRoute { activity,options ->
-
             when (options.pageName){
                 "mainActivity"->{
                     activity.startActivityForResult(Intent(activity,MainActivity::class.java),options.requestCode)
