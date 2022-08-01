@@ -2,6 +2,8 @@ package com.dodo.flutterbridge
 
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.StandardMessageCodec
+import io.flutter.plugin.common.StandardMethodCodec
 import kotlinx.coroutines.*
 
 /**
@@ -14,8 +16,19 @@ import kotlinx.coroutines.*
 class FlutterMethodChannel(engine: FlutterEngine, channelName: String) {
 
     private val mainImmediateScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private val delegate = MethodChannel(engine.dartExecutor.binaryMessenger,channelName)
+
+    /**
+     *  真正的MethodChannel
+     *  使用了[JsonMessageCodec]作为[StandardMethodCodec] 的MessageCodec
+     *  里面处理了json格式
+     */
+    private val delegate = MethodChannel(
+        engine.dartExecutor.binaryMessenger, channelName,
+        StandardMethodCodec(JsonMessageCodec())
+    )
+
     private val flutterMethodCallHandler = FlutterMethodCallHandler()
+
     init {
         delegate.setMethodCallHandler(flutterMethodCallHandler)
     }
@@ -26,11 +39,11 @@ class FlutterMethodChannel(engine: FlutterEngine, channelName: String) {
         }
     }
 
-    fun addObserver(name: String,observer: OnCallObserver) {
+    fun addObserver(name: String, observer: OnCallObserver) {
         flutterMethodCallHandler.addObserver(name, observer)
     }
 
-    fun removeObserver(name: String,observer: OnCallObserver) {
-        flutterMethodCallHandler.removeObserver(name,observer)
+    fun removeObserver(name: String, observer: OnCallObserver) {
+        flutterMethodCallHandler.removeObserver(name, observer)
     }
 }

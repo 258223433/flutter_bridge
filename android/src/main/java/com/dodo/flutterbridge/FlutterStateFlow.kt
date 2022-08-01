@@ -12,14 +12,15 @@ import kotlinx.coroutines.flow.*
  *     desc   : 可以和flutter交互的StateFlow
  *     version: 1.0
  */
-class FlutterStateFlow<T>(
+class FlutterStateFlow<T:Any>(
     val name: String,
     initialState: T,
     private val delegate: MutableStateFlow<T> = MutableStateFlow(initialState),
     owner: LifecycleOwner?=null,
-) : MutableStateFlow<T> by delegate,OnCallObserver {
+) : MutableStateFlow<T> by delegate,TypeOnCallObserver<T,Any?> {
 
     private val channel = FlutterContext.globalChannel
+    private val type = initialState.javaClass
 
     init {
         channel.addObserver(name, this)
@@ -51,16 +52,20 @@ class FlutterStateFlow<T>(
         channel.invokeMethod(name, value)
     }
 
-    override fun onCall(data: Any?): Any? {
+    fun dispose() {
+        channel.removeObserver(name,this)
+        Log.d("dodo", "dispose")
+    }
+
+    override fun onCallOfType(data: T): Any? {
         Log.d("dodo", "${Thread.currentThread()}->$data")
-        data?.apply {
-            delegate.value = this as T
+        data.apply {
+            delegate.value = this
         }
         return null
     }
 
-    fun dispose() {
-        channel.removeObserver(name,this)
-        Log.d("dodo", "dispose")
+    override fun fromJson(data: JsonMessageCodec.JsonString): T {
+        return data.fromJson(type)
     }
 }

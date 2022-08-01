@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
+import 'package:flutter_bridge/src/json_message_codec.dart';
 
 ///   author : liuduo
 ///   e-mail : liuduo@gyenno.com
@@ -11,7 +12,7 @@ class FlutterChannel {
   late FlutterMethodCallHandler flutterMethodCallHandler;
 
   FlutterChannel(String channelName) {
-    delegate = MethodChannel(channelName);
+    delegate = MethodChannel(channelName,StandardMethodCodec(JsonMessageCodec()));
     flutterMethodCallHandler = FlutterMethodCallHandler();
     delegate.setMethodCallHandler(flutterMethodCallHandler.methodCallHandler);
     print("flutter_bridge FlutterChannel init");

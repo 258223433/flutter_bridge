@@ -12,42 +12,39 @@ import java.lang.ref.WeakReference
  *     version: 1.0
  */
 internal class FlutterMethodCallHandler : MethodChannel.MethodCallHandler {
-    private val observers = mutableMapOf<String, MutableList<WeakReference<OnCallObserver>>>()
+    private val observers = mutableMapOf<String, MutableList<OnCallObserver>>()
 
 
-    // TODO: 监听的泛型
     fun addObserver(name: String, observer: OnCallObserver) {
         var list = observers[name]
         if (list == null) {
             list = mutableListOf()
             observers[name] = list
         }
-        list.add(WeakReference(observer))
+        list.add(observer)
     }
 
     fun removeObserver(name: String, observer: OnCallObserver) {
-        var list = observers[name]
+        val list = observers[name]
         list?.forEach {
-            if (it.get()?.equals(observer) == true) {
+            if (it == observer) {
                 list.remove(it)
             }
         }
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        // TODO: 数据解析adapter看在哪里处理
         try {
 
             val list = observers[call.method]
             if (list.isNullOrEmpty()) {
                 result.notImplemented()
             } else {
-                val get = list[0].get()
-                if (list.size == 1 && get != null) {
-                    result.success(get.onCall(call.arguments))
+                if (list.size == 1) {
+                    result.success(list[0].onCall(call.arguments))
                 } else {
                     list.forEach {
-                        it.get()?.onCall(call.arguments)
+                        it.onCall(call.arguments)
                     }
                     result.success(null)
                 }

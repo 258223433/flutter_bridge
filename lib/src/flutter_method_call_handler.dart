@@ -34,7 +34,7 @@ class FlutterMethodCallHandler {
   dynamic handle(MethodCall call) async {
     print("flutter_bridge handle ${call.method}->${call.arguments}");
     var list = observers[call.method];
-    print("flutter_bridge find ${list}");
+    print("flutter_bridge find $list");
     if (list == null || list.isEmpty) {
       throw Exception(
           'FlutterMethodCallHandler not implemented ${call.method}');
@@ -50,5 +50,5 @@ class FlutterMethodCallHandler {
 }
 
 abstract class OnCallObserver {
-  dynamic onCall(dynamic data);
+  onCall(dynamic data);
 }

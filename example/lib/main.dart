@@ -4,6 +4,25 @@ import 'package:flutter_bridge/flutter_bridge.dart';
 import 'package:flutter_boost/flutter_boost.dart';
 import 'package:provider/provider.dart';
 
+class UserInfo {
+  var name = "test";
+  var count = 0;
+
+  UserInfo(this.name, this.count);
+
+  factory UserInfo.fromJson(Map<String, dynamic> json) {
+    return UserInfo(
+      json['name'] as String,
+      json['count'] as int,
+    );
+  }
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'name': name,
+        'count': count,
+      };
+}
+
 void main() {
   FlutterBridge.instance().init().registerRoute({
     '/': (settings, uniqueId) {
@@ -122,7 +141,8 @@ class MainPage extends StatelessWidget {
             Text('Main Page $data'),
             TextButton(
               onPressed: () {
-                BoostNavigator.instance.push("simplePage",arguments: {"data":"arguments form flutter"});
+                BoostNavigator.instance.push("simplePage",
+                    arguments: {"data": "arguments form flutter"});
               },
               child: const Text('Next'),
             ),
@@ -145,33 +165,45 @@ class SimplePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ChangeNotifierProvider<NativeData<int?>>(
-              create: (_) => NativeData("count", null),
-              child:  Column(
+            ChangeNotifierProvider<NativeData<UserInfo?>>(
+              create: (_) => NativeData<UserInfo?>("count", null, (json) {
+                return UserInfo.fromJson(json);
+              }),
+              child: Column(
                 children: [
-                  Consumer<NativeData<int?>>(
+                  Consumer<NativeData<UserInfo?>>(
                     builder: (context, notifier, child) {
-                      return Text("${notifier.value}");
+                      return Text("${notifier.value?.name}");
                     },
                   ),
-                  Consumer<NativeData<int?>>(
+                  Consumer<NativeData<UserInfo?>>(
+                    builder: (context, notifier, child) {
+                      return Text("${notifier.value?.count}");
+                    },
+                  ),
+                  Consumer<NativeData<UserInfo?>>(
                     builder: (context, notifier, child) {
                       return TextButton(
-                          onPressed: () {
-                             notifier.value = (notifier.value ?? 0) +100;
-                          },
-                          child: const Text('+100'),
-                        );
+                        onPressed: () {
+                          if (notifier.value != null) {
+                            var value  = notifier.value!;
+                            var count = value.count + 100;
+                            notifier.value = UserInfo(value.name, count);
+                          }
+                        },
+                        child: const Text('+100'),
+                      );
                     },
                   ),
                 ],
               ),
             ),
-
             Text('SimplePage $data'),
             TextButton(
               onPressed: () {
-                BoostNavigator.instance.push("mainActivity").then((value) => print('yyzddd:$value'));
+                BoostNavigator.instance
+                    .push("mainActivity")
+                    .then((value) => print('yyzddd:$value'));
               },
               child: const Text('Next'),
             ),

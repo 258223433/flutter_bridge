@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bridge/src/flutter_context.dart';
 import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
+import 'package:flutter_bridge/src/type_on_call_observer.dart';
 
 ///   author : liuduo
 ///   e-mail : liuduo@gyenno.com
@@ -10,12 +12,15 @@ import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
 ///   desc   : 和原生交互的数据
 ///   version: 1.0
 ///todo 数据粘性
-class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
+class NativeData<T> extends ValueNotifier<T> with TypeOnCallObserver<T, void> {
   String name;
-  final _channel = FlutterContext.instance().globalChannel;
+  final _channel = FlutterContext
+      .instance()
+      .globalChannel;
   List<Completer<T>> completerList = [];
+  FromJson<T>? fromJson;
 
-  NativeData(this.name, super.value) {
+  NativeData(this.name, super.value, [this.fromJson]) {
     if (value != null) {
       _setNativeValue(value);
     }
@@ -41,13 +46,7 @@ class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
   }
 
   @override
-  onCall(data) {
-    print("flutter_bridge NativeData onCall");
-    super.value = data;
-  }
-
-  @override
-  notifyListeners(){
+  notifyListeners() {
     super.notifyListeners();
     for (var element in completerList) {
       element.complete(value);
@@ -66,4 +65,20 @@ class NativeData<T> extends ValueNotifier<T> implements OnCallObserver {
       return Future.value(value);
     }
   }
+
+  @override
+  void onCallOfType(T data) {
+    print("flutter_bridge NativeData onCall");
+    super.value = data;
+  }
+
+  @override
+  T fromJsom(Map<String, dynamic> json) {
+    if (fromJson == null) {
+      throw Exception("NativeData 请通过构造方法传递fromJson");
+    }
+    return fromJson!.call(json);
+  }
 }
+
+typedef FromJson<T> = T Function(Map<String, dynamic> json);
