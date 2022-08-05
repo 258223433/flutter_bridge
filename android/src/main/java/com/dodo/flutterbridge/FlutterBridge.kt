@@ -3,6 +3,7 @@ package com.dodo.flutterbridge
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import com.dodo.flutterbridge.FlutterContext.FLUTTER_CHANNEL_METHOD_READY
 import com.idlefish.flutterboost.FlutterBoost
 import com.idlefish.flutterboost.FlutterBoostDelegate
 import com.idlefish.flutterboost.FlutterBoostPlugin
@@ -50,27 +51,35 @@ object FlutterBridge {
                 override fun pushNativeRoute(options: FlutterBoostRouteOptions) {
 
                     routeList.forEach { route ->
-                        route(FlutterBoost.instance().currentActivity(),
-                            options.toFlutterRouteOptions())
+                        route(
+                            FlutterBoost.instance().currentActivity(),
+                            options.toFlutterRouteOptions()
+                        )
                     }
                 }
 
                 override fun pushFlutterRoute(options: FlutterBoostRouteOptions) {
                     val intent: Intent = FlutterBoostActivity.CachedEngineIntentBuilder(
-                        FlutterBoostActivity::class.java)
+                        FlutterBoostActivity::class.java
+                    )
                         .backgroundMode(FlutterActivityLaunchConfigs.BackgroundMode.transparent)
                         .destroyEngineWithActivity(false)
                         .uniqueId(options.uniqueId())
                         .url(options.pageName())
                         .urlParams(options.arguments())
                         .build(FlutterBoost.instance().currentActivity())
-                    FlutterBoost.instance().currentActivity().startActivityForResult(intent,options.requestCode())
+                    FlutterBoost.instance().currentActivity()
+                        .startActivityForResult(intent, options.requestCode())
                 }
             }) { engine ->
                 FlutterContext.globalEngine = engine
                 FlutterContext.globalChannel =
                     FlutterMethodChannel(engine, FlutterContext.GLOBAL_FLUTTER_CHANNEL_NAME)
-                onInit?.invoke()
+                val ready = FlutterLiveData(FLUTTER_CHANNEL_METHOD_READY, Int::class.java)
+                ready.observeForever {
+                    onInit?.invoke()
+                    ready.dispose()
+                }
             }
         } else {
             throw IllegalStateException("FlutterInitializer 不能初始化两次")

@@ -166,7 +166,7 @@ class SimplePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ChangeNotifierProvider<NativeData<UserInfo?>>(
-              create: (_) => NativeData<UserInfo?>("count", null, (json) {
+              create: (_) => NativeData("count", null, (json) {
                 return UserInfo.fromJson(json);
               }),
               child: Column(

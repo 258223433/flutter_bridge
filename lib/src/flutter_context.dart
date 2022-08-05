@@ -7,7 +7,8 @@ import 'package:flutter_bridge/src/flutter_channel.dart';
 ///   desc   :
 ///   version: 1.0
 class FlutterContext{
-  static const globalFlutterChannelName = "global_flutter_channel";
+  static const globalFlutterChannelName = "com.dodo.flutterbridge.global_flutter_channel";
+  static const flutterChannelMethodReady = "com.dodo.flutterbridge.method_ready";
   late final FlutterChannel globalChannel;
 
   FlutterContext._() ;
