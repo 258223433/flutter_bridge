@@ -3,6 +3,7 @@ package com.dodo.flutterbridge
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import java.lang.ref.WeakReference
+import io.flutter.plugin.common.StandardMessageCodec
 
 /**
  *     author : liuduo
@@ -13,6 +14,11 @@ import java.lang.ref.WeakReference
  */
 internal class FlutterMethodCallHandler : MethodChannel.MethodCallHandler {
     private val observers = mutableMapOf<String, MutableList<OnCallObserver>>()
+
+    /**
+     * 虽然flutter里面定义了null的类型,但是[StandardMessageCodec.writeValue]中写入数据为非空,所以这里定义一个默认的返回值
+     */
+    private val defaultResult = "null"
 
 
     fun addObserver(name: String, observer: OnCallObserver) {
@@ -41,12 +47,12 @@ internal class FlutterMethodCallHandler : MethodChannel.MethodCallHandler {
                 result.notImplemented()
             } else {
                 if (list.size == 1) {
-                    result.success(list[0].onCall(call.arguments))
+                    result.success(list[0].onCall(call.arguments)?:defaultResult)
                 } else {
                     list.forEach {
                         it.onCall(call.arguments)
                     }
-                    result.success(null)
+                    result.success(defaultResult)
                 }
             }
         } catch (e: Throwable) {
