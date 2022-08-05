@@ -16,7 +16,7 @@ import java.nio.ByteBuffer
  *     version: 1.0
  */
 class JsonMessageCodec : StandardMessageCodec() {
-    private val JSON: Byte = 15
+    private val JSON: Byte = 64
     private var gson = Gson()
 
     override fun writeValue(stream: ByteArrayOutputStream, value: Any) {

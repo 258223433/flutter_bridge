@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 ///   desc   : JsonMessageCodec
 ///   version: 1.0
 class JsonMessageCodec extends StandardMessageCodec {
-  static const int _valueJson = 15;
+  static const int _valueJson = 64;
 
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
