@@ -1,8 +1,6 @@
 package com.dodo.flutterbridge
 
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import com.google.gson.internal.Primitives
 import io.flutter.plugin.common.StandardMessageCodec
 import java.io.ByteArrayOutputStream
 import java.lang.reflect.Type

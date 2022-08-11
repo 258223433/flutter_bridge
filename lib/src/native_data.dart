@@ -18,9 +18,9 @@ class NativeData<T> extends ValueNotifier<T> with TypeOnCallObserver<T, void> {
       .instance()
       .globalChannel;
   List<Completer<T>> completerList = [];
-  FromJson<T>? fromJson;
+  final FromJson<T>? _fromJson;
 
-  NativeData(this.name, super.value, [this.fromJson]) {
+  NativeData(this.name, super.value, [this._fromJson]) {
     if (value != null) {
       _setNativeValue(value);
     }
@@ -54,6 +54,7 @@ class NativeData<T> extends ValueNotifier<T> with TypeOnCallObserver<T, void> {
     completerList.clear();
   }
 
+  ///todo 多个数据requireValue存在的顺序问题
   ///获取一个非空的value
   ///如果没有则等待一个新value的到来
   Future<T> requireValue() async {
@@ -74,10 +75,10 @@ class NativeData<T> extends ValueNotifier<T> with TypeOnCallObserver<T, void> {
 
   @override
   T fromJsom(Map<String, dynamic> json) {
-    if (fromJson == null) {
+    if (_fromJson == null) {
       throw Exception("NativeData 请通过构造方法传递fromJson");
     }
-    return fromJson!.call(json);
+    return _fromJson!.call(json);
   }
 }
 

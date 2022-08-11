@@ -40,23 +40,18 @@ internal class FlutterMethodCallHandler : MethodChannel.MethodCallHandler {
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        try {
-
-            val list = observers[call.method]
-            if (list.isNullOrEmpty()) {
-                result.notImplemented()
+        val list = observers[call.method]
+        if (list.isNullOrEmpty()) {
+            result.notImplemented()
+        } else {
+            if (list.size == 1) {
+                result.success(list[0].onCall(call.arguments) ?: defaultResult)
             } else {
-                if (list.size == 1) {
-                    result.success(list[0].onCall(call.arguments)?:defaultResult)
-                } else {
-                    list.forEach {
-                        it.onCall(call.arguments)
-                    }
-                    result.success(defaultResult)
+                list.forEach {
+                    it.onCall(call.arguments)
                 }
+                result.success(defaultResult)
             }
-        } catch (e: Throwable) {
-            result.error("android业务异常", e.toString(), null)
         }
     }
 }

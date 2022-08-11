@@ -28,8 +28,8 @@ class FlutterLiveData<T : Any>(
 
         owner?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
-                channel.removeObserver(name, this@FlutterLiveData)
                 owner.lifecycle.removeObserver(this)
+                dispose()
             }
         })
     }
