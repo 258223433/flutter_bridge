@@ -4,9 +4,9 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import com.dodo.flutterbridge.FlutterContext.FLUTTER_CHANNEL_METHOD_READY
+import com.dodo.flutterbridge.data.FlutterLiveData
 import com.idlefish.flutterboost.FlutterBoost
 import com.idlefish.flutterboost.FlutterBoostDelegate
-import com.idlefish.flutterboost.FlutterBoostPlugin
 import com.idlefish.flutterboost.FlutterBoostRouteOptions
 import com.idlefish.flutterboost.containers.FlutterBoostActivity
 import com.idlefish.flutterboost.containers.FlutterBoostFragment
@@ -61,8 +61,7 @@ object FlutterBridge {
                 override fun pushFlutterRoute(options: FlutterBoostRouteOptions) {
                     val intent: Intent = FlutterBoostActivity.CachedEngineIntentBuilder(
                         FlutterBoostActivity::class.java
-                    )
-                        .backgroundMode(FlutterActivityLaunchConfigs.BackgroundMode.transparent)
+                    ).backgroundMode(FlutterActivityLaunchConfigs.BackgroundMode.transparent)
                         .destroyEngineWithActivity(false)
                         .uniqueId(options.uniqueId())
                         .url(options.pageName())
@@ -78,7 +77,7 @@ object FlutterBridge {
                 val ready = FlutterLiveData(FLUTTER_CHANNEL_METHOD_READY, Int::class.java)
                 ready.observeForever {
                     onInit?.invoke()
-                    ready.dispose()
+                    ready.detach()
                 }
             }
         } else {

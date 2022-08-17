@@ -1,5 +1,6 @@
 package com.dodo.flutterbridge
 
+import com.dodo.flutterbridge.common.GsonUtil
 import com.google.gson.Gson
 import io.flutter.plugin.common.StandardMessageCodec
 import java.io.ByteArrayOutputStream
@@ -14,15 +15,16 @@ import java.nio.ByteBuffer
  *     version: 1.0
  */
 class JsonMessageCodec : StandardMessageCodec() {
-    private val JSON: Byte = 64
-    private var gson = Gson()
+    companion object {
+        private const val JSON: Byte = 64
+    }
 
     override fun writeValue(stream: ByteArrayOutputStream, value: Any) {
         try {
             super.writeValue(stream, value)
         } catch (e: IllegalArgumentException) {
             stream.write(JSON.toInt())
-            writeBytes(stream, gson.toJson(value).toByteArray())
+            writeBytes(stream, GsonUtil.gson.toJson(value).toByteArray())
         }
     }
 
@@ -32,7 +34,7 @@ class JsonMessageCodec : StandardMessageCodec() {
         } catch (e: IllegalArgumentException) {
             when (type) {
                 JSON -> {
-                    JsonString(String(readBytes(buffer)), gson)
+                    JsonString(String(readBytes(buffer)), GsonUtil.gson)
                 }
                 else -> throw e
             }
@@ -52,7 +54,7 @@ class JsonMessageCodec : StandardMessageCodec() {
         }
 
         fun <T> fromJson(classOfT: Class<T>): T {
-            return gson.fromJson(jsonString,classOfT)
+            return gson.fromJson(jsonString, classOfT)
         }
 
         override fun toString(): String {

@@ -54,7 +54,7 @@ abstract class BaseBuilder {
 
     abstract fun <C> caller(caller: C): BaseBuilder
 
-    abstract fun onCall(onCall: Type): BaseBuilder
+    abstract fun onCall(onCall: Any): BaseBuilder
 
     abstract fun navigate(): Any
 
@@ -79,7 +79,7 @@ class ActivityBuilder<C> : BaseBuilder() {
         }
     }
 
-    override fun onCall(onCall: Type): ActivityBuilder<C> {
+    override fun onCall(onCall: Any): ActivityBuilder<C> {
         TODO("Not yet implemented")
     }
 
@@ -104,7 +104,7 @@ class ActivityBuilder<C> : BaseBuilder() {
 }
 
 class FragmentBuilder<F : FlutterBoostFragment, C> : BaseBuilder() {
-    internal var caller: C? = null
+    private var caller: C? = null
 
     init {
 
@@ -119,7 +119,7 @@ class FragmentBuilder<F : FlutterBoostFragment, C> : BaseBuilder() {
         }
     }
 
-    override fun onCall(onCall: Type): BaseBuilder {
+    override fun onCall(onCall: Any): BaseBuilder {
         TODO("Not yet implemented")
     }
 

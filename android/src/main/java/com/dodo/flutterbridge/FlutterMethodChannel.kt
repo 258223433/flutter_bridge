@@ -1,8 +1,8 @@
 package com.dodo.flutterbridge
 
+import com.dodo.flutterbridge.call.RootCallGroup
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.common.StandardMethodCodec
 import kotlinx.coroutines.*
 
@@ -27,23 +27,14 @@ class FlutterMethodChannel(engine: FlutterEngine, channelName: String) {
         StandardMethodCodec(JsonMessageCodec())
     )
 
-    private val flutterMethodCallHandler = FlutterMethodCallHandler()
 
     init {
-        delegate.setMethodCallHandler(flutterMethodCallHandler)
+        delegate.setMethodCallHandler(RootCallGroup)
     }
 
     fun invokeMethod(method: String, arguments: Any?, callback: MethodChannel.Result? = null) {
         mainImmediateScope.launch {
             delegate.invokeMethod(method, arguments, callback)
         }
-    }
-
-    fun addObserver(name: String, observer: OnCallObserver) {
-        flutterMethodCallHandler.addObserver(name, observer)
-    }
-
-    fun removeObserver(name: String, observer: OnCallObserver) {
-        flutterMethodCallHandler.removeObserver(name, observer)
     }
 }

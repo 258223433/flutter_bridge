@@ -4,8 +4,7 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import com.dodo.flutterbridge.FlutterBridge
-import com.dodo.flutterbridge.FlutterLiveData
-import com.dodo.flutterbridge.FlutterStateFlow
+import com.dodo.flutterbridge.data.FlutterLiveData
 import kotlin.concurrent.thread
 
 

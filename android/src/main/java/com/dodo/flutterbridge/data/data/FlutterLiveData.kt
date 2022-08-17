@@ -1,10 +1,11 @@
-package com.dodo.flutterbridge
+package com.dodo.flutterbridge.data
 
 import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import com.dodo.flutterbridge.call.*
 
 /**
  *     author : liuduo
@@ -14,22 +15,20 @@ import androidx.lifecycle.LiveData
  *     version: 1.0
  */
 class FlutterLiveData<T : Any>(
-    private val name: String,
-    private val clazz: Class<T>,
+    override val name: String,
+    clazz: Class<T>,
     owner: LifecycleOwner? = null
-) :
-    LiveData<T>(),
-    TypeOnCallObserver<T, Any?> {
+) : LiveData<T>(), CallChild<T,T> {
 
-    private val channel: FlutterMethodChannel = FlutterContext.globalChannel
+    override var parent: CallInvoker<T, *>? = DataNamedCallGroup.create(name, clazz)
 
     init {
-        channel.addObserver(name, this)
+        attach(DataNamedCallGroup.create(name, clazz))
 
         owner?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 owner.lifecycle.removeObserver(this)
-                dispose()
+                detach()
             }
         })
     }
@@ -48,30 +47,26 @@ class FlutterLiveData<T : Any>(
 
     public override fun postValue(value: T) {
         setFlutterValue(value)
-        super.postValue(value)
     }
 
     public override fun setValue(value: T) {
         setFlutterValue(value)
-        super.setValue(value)
     }
 
     private fun setFlutterValue(value: T) {
-        channel.invokeMethod(name, value)
+        invoke(value, null)
     }
 
-    fun dispose() {
-        channel.removeObserver(name, this)
-        Log.d("dodo", "dispose")
-    }
 
-    override fun onCallOfType(data: T): Any? {
+    override fun onCall(data: T): Any? {
         Log.d("dodo", "${Thread.currentThread()}->$data")
-        super.setValue(data)
+        if (Looper.getMainLooper().thread == Thread.currentThread()) {
+            super.setValue(data)
+        } else {
+            super.postValue(data)
+        }
         return null
     }
 
-    override fun fromJson(data: JsonMessageCodec.JsonString): T {
-        return data.fromJson(clazz)
-    }
+    override fun encodeData(data: T): T = data
 }
