@@ -1,6 +1,6 @@
 package com.dodo.flutterbridge.call.strategy
 
-import com.dodo.flutterbridge.call.CallHandler
+import com.dodo.flutterbridge.call.Handler
 
 /**
  *     author : liuduo
@@ -11,9 +11,9 @@ import com.dodo.flutterbridge.call.CallHandler
  */
 class MutableHandlerStrategy<A> : StickyHandlerStrategy<A>() {
 
-    private val handlers = mutableMapOf<String, MutableList<CallHandler<A>>>()
+    private val handlers = mutableMapOf<String, MutableList<Handler<A>>>()
 
-    override fun addCallHandler(handler: CallHandler<A>) {
+    override fun addHandler(handler: Handler<A>) {
         val name = handler.name
         var list = handlers[name]
         if (list == null) {
@@ -23,7 +23,7 @@ class MutableHandlerStrategy<A> : StickyHandlerStrategy<A>() {
         list.add(handler)
     }
 
-    override fun removeCallHandler(handler: CallHandler<A>) {
+    override fun removeHandler(handler: Handler<A>) {
         val list = handlers[handler.name]
         list?.forEach {
             if (it == handler) {

@@ -15,6 +15,6 @@ object Constant {
     object Name {
         const val root_name = "root"
         const val type_data_name = "data"
-        const val type_invoke_name = "invoke"
+        const val type_function_name = "function"
     }
 }

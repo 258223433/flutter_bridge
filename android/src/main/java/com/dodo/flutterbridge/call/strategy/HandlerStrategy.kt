@@ -1,6 +1,6 @@
 package com.dodo.flutterbridge.call.strategy
 
-import com.dodo.flutterbridge.call.CallHandleable
+import com.dodo.flutterbridge.call.Handleable
 import kotlin.jvm.Throws
 
 /**
@@ -10,8 +10,8 @@ import kotlin.jvm.Throws
  *     desc   : 保存和调用Handler的策略
  *     version: 1.0
  */
-interface HandlerStrategy<A> : CallHandleable<A> {
+interface HandlerStrategy<S> : Handleable<S> {
 
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
-    fun onCallStrategy(name: String, sticky: Boolean, data: A): Any?
+    fun onCallStrategy(name: String, sticky: Boolean, data: S): Any?
 }

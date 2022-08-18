@@ -6,6 +6,10 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import com.dodo.flutterbridge.call.*
+import com.dodo.flutterbridge.call.strategy.InvokerStrategy
+import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy
+import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy.ConflictType.Replace
+import io.flutter.plugin.common.MethodChannel
 
 /**
  *     author : liuduo
@@ -17,18 +21,20 @@ import com.dodo.flutterbridge.call.*
 class FlutterLiveData<T : Any>(
     override val name: String,
     clazz: Class<T>,
-    owner: LifecycleOwner? = null
-) : LiveData<T>(), CallChild<T,T> {
+    owner: LifecycleOwner? = null,
+    override val invokerStrategy: InvokerStrategy<T> = SingleInvokerStrategy(Replace)
+) : LiveData<T>(), CallLeaf<T, T>, InvokerStrategy<T> by invokerStrategy {
 
-    override var parent: CallInvoker<T, *>? = DataNamedCallGroup.create(name, clazz)
+
+    private val parent = DataNamedCallNode.create(name, clazz)
 
     init {
-        attach(DataNamedCallGroup.create(name, clazz))
+        linkParent(parent)
 
         owner?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 owner.lifecycle.removeObserver(this)
-                detach()
+                dispose()
             }
         })
     }
@@ -55,6 +61,10 @@ class FlutterLiveData<T : Any>(
 
     private fun setFlutterValue(value: T) {
         invoke(value, null)
+    }
+
+    fun dispose() {
+        unlinkParent(parent)
     }
 
 

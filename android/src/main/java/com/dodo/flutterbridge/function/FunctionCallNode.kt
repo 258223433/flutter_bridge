@@ -1,10 +1,10 @@
-package com.dodo.flutterbridge.invoke
+package com.dodo.flutterbridge.function
 
-import com.dodo.flutterbridge.call.BaseCallGroup
-import com.dodo.flutterbridge.call.CallGroup.StrategyData
-import com.dodo.flutterbridge.call.RootCallGroup
+import com.dodo.flutterbridge.call.BaseCallNode
+import com.dodo.flutterbridge.call.GlobalCallRoot
+import com.dodo.flutterbridge.call.HandlerNode.StrategyData
 import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy
-import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy.ConflictType.Replace
+import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy
 import com.dodo.flutterbridge.common.Constant
 import com.dodo.flutterbridge.model.FlutterCallInfo
 
@@ -15,13 +15,15 @@ import com.dodo.flutterbridge.model.FlutterCallInfo
  *     desc   :
  *     version: 1.0
  */
-object InvokeCallGroup :
-    BaseCallGroup<FlutterCallInfo, FlutterCallInfo>(SingleHandlerStrategy(Replace)) {
+object FunctionCallNode : BaseCallNode<FlutterCallInfo, FlutterCallInfo>(
+    SingleHandlerStrategy(SingleHandlerStrategy.ConflictType.Exception),
+    SingleInvokerStrategy(SingleInvokerStrategy.ConflictType.Exception)
+) {
 
-    override val name: String = Constant.Name.type_invoke_name
+    override val name: String = Constant.Name.type_function_name
 
     init {
-        attach(RootCallGroup)
+        linkParent(GlobalCallRoot)
     }
 
     override fun decodeData(data: FlutterCallInfo): StrategyData<FlutterCallInfo> =

@@ -8,17 +8,17 @@ import kotlin.jvm.Throws
 /**
  *     author : liuduo
  *     e-mail : liuduo@gyenno.com
- *     time   : 2022/08/11
+ *     time   : 2022/08/17
  *     desc   :
  *     version: 1.0
  */
-interface CallGroup<S, P> : CallHandleable<S>, CallChild<S,P>{
-    val strategy: HandlerStrategy<S>
+interface HandlerNode<S, P>:Handleable<S>,Handler<P> {
+    val handlerStrategy: HandlerStrategy<S>
 
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
     override fun onCall(data: P): Any? {
         val decodeData = decodeData(data)
-        return strategy.onCallStrategy(decodeData.name, decodeData.sticky, decodeData.data)
+        return handlerStrategy.onCallStrategy(decodeData.name, decodeData.sticky, decodeData.data)
     }
 
     /**

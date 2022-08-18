@@ -1,10 +1,10 @@
 package com.dodo.flutterbridge.data
 
-import com.dodo.flutterbridge.call.BaseCallGroup
-import com.dodo.flutterbridge.call.CallGroup.StrategyData
-import com.dodo.flutterbridge.call.RootCallGroup
+import com.dodo.flutterbridge.call.BaseCallNode
+import com.dodo.flutterbridge.call.HandlerNode.StrategyData
+import com.dodo.flutterbridge.call.GlobalCallRoot
 import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy
-import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy.ConflictType.Exception
+import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy
 import com.dodo.flutterbridge.common.Constant
 import com.dodo.flutterbridge.model.FlutterCallInfo
 
@@ -15,13 +15,14 @@ import com.dodo.flutterbridge.model.FlutterCallInfo
  *     desc   :
  *     version: 1.0
  */
-object DataCallGroup :
-    BaseCallGroup<FlutterCallInfo, FlutterCallInfo>(SingleHandlerStrategy(Exception)) {
-
+object DataCallNode : BaseCallNode<FlutterCallInfo, FlutterCallInfo>(
+    SingleHandlerStrategy(SingleHandlerStrategy.ConflictType.Exception),
+    SingleInvokerStrategy(SingleInvokerStrategy.ConflictType.Exception)
+) {
     override val name = Constant.Name.type_data_name
 
     init {
-        attach(RootCallGroup)
+        linkParent(GlobalCallRoot)
     }
 
     override fun decodeData(data: FlutterCallInfo): StrategyData<FlutterCallInfo> =

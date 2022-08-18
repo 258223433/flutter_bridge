@@ -1,6 +1,6 @@
 package com.dodo.flutterbridge
 
-import com.dodo.flutterbridge.call.RootCallGroup
+import com.dodo.flutterbridge.call.GlobalCallRoot
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.StandardMethodCodec
@@ -29,7 +29,7 @@ class FlutterMethodChannel(engine: FlutterEngine, channelName: String) {
 
 
     init {
-        delegate.setMethodCallHandler(RootCallGroup)
+        delegate.setMethodCallHandler(GlobalCallRoot)
     }
 
     fun invokeMethod(method: String, arguments: Any?, callback: MethodChannel.Result? = null) {

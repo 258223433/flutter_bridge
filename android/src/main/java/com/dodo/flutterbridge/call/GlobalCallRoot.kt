@@ -1,7 +1,7 @@
 package com.dodo.flutterbridge.call
 
 import com.dodo.flutterbridge.FlutterContext
-import com.dodo.flutterbridge.call.CallGroup.StrategyData
+import com.dodo.flutterbridge.call.HandlerNode.StrategyData
 import com.dodo.flutterbridge.call.strategy.HandlerNotFoundException
 import com.dodo.flutterbridge.call.strategy.MutableHandlerException
 import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy
@@ -20,10 +20,8 @@ import io.flutter.plugin.common.StandardMessageCodec
  *     desc   : 全局的MethodCallHandler
  *     version: 1.0
  */
-internal object RootCallGroup : BaseCallGroup<FlutterCallInfo, MethodCall>(
-    SingleHandlerStrategy(
-        Exception
-    )
+internal object GlobalCallRoot : BaseCallRoot<FlutterCallInfo, MethodCall>(
+    SingleHandlerStrategy(Exception)
 ), MethodChannel.MethodCallHandler {
 
     override val name: String = Constant.Name.root_name
@@ -54,7 +52,7 @@ internal object RootCallGroup : BaseCallGroup<FlutterCallInfo, MethodCall>(
      * @param callback Result
      */
     override fun invoke(data: FlutterCallInfo, callback: MethodChannel.Result?) {
-        val methodCall = encodeData(data)
+        val methodCall = data.toMethodCall()
         FlutterContext.globalChannel.invokeMethod(methodCall.method, methodCall.arguments, callback)
     }
 
@@ -67,7 +65,6 @@ internal object RootCallGroup : BaseCallGroup<FlutterCallInfo, MethodCall>(
         )
     }
 
-    override fun encodeData(data: FlutterCallInfo): MethodCall = data.toMethodCall()
 }
 
 fun MethodCall.toFlutterCallInfo(): FlutterCallInfo {
@@ -75,7 +72,7 @@ fun MethodCall.toFlutterCallInfo(): FlutterCallInfo {
     val methodInfo = FlutterMethodInfo(method)
     methodInfo.type = "data"
     methodInfo.sticky = true
-    FlutterCallInfo(methodInfo,arguments)
+    FlutterCallInfo(methodInfo, arguments)
     return FlutterCallInfo(methodInfo, arguments)
 }
 

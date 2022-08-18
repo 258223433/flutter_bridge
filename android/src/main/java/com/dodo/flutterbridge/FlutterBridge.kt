@@ -77,7 +77,7 @@ object FlutterBridge {
                 val ready = FlutterLiveData(FLUTTER_CHANNEL_METHOD_READY, Int::class.java)
                 ready.observeForever {
                     onInit?.invoke()
-                    ready.detach()
+                    ready.dispose()
                 }
             }
         } else {

@@ -7,9 +7,9 @@ package com.dodo.flutterbridge.call
  *     desc   : 可以添加和移除handler的容器
  *     version: 1.0
  */
-interface CallHandleable<S> {
+interface Handleable<S> {
 
-    fun addCallHandler(handler: CallHandler<S>)
+    fun addHandler(handler: Handler<S>)
 
-    fun removeCallHandler(handler: CallHandler<S>)
+    fun removeHandler(handler: Handler<S>)
 }

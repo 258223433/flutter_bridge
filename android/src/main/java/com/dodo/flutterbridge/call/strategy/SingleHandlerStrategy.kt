@@ -1,6 +1,6 @@
 package com.dodo.flutterbridge.call.strategy
 
-import com.dodo.flutterbridge.call.CallHandler
+import com.dodo.flutterbridge.call.Handler
 import kotlin.jvm.Throws
 
 /**
@@ -16,9 +16,9 @@ class SingleHandlerStrategy<A>(
      */
     private val conflictType: ConflictType
 ) : StickyHandlerStrategy<A>() {
-    private val handlers = mutableMapOf<String, CallHandler<A>>()
+    private val handlers = mutableMapOf<String, Handler<A>>()
 
-    override fun addCallHandler(handler: CallHandler<A>) {
+    override fun addHandler(handler: Handler<A>) {
         if (handlers[handler.name] == null) {
             handlers[handler.name] = handler
         } else {
@@ -26,7 +26,7 @@ class SingleHandlerStrategy<A>(
         }
     }
 
-    override fun removeCallHandler(handler: CallHandler<A>) {
+    override fun removeHandler(handler: Handler<A>) {
         handlers.remove(handler.name)
     }
 
@@ -54,8 +54,8 @@ class SingleHandlerStrategy<A>(
         Exception;
 
         operator fun <A> invoke(
-            handlers: MutableMap<String, CallHandler<A>>,
-            handler: CallHandler<A>
+            handlers: MutableMap<String, Handler<A>>,
+            handler: Handler<A>
         ) {
             when (this) {
                 Replace -> handlers[handler.name] = handler

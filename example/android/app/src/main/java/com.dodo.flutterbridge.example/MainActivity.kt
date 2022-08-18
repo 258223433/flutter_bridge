@@ -10,6 +10,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.dodo.flutterbridge.FlutterBridge
 import com.dodo.flutterbridge.example.databinding.ActivityMainBinding
+import com.dodo.flutterbridge.function.FlutterFunction
+import com.dodo.flutterbridge.function.FlutterHandler
+import io.flutter.plugin.common.MethodChannel
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +44,27 @@ class MainActivity : AppCompatActivity() {
                 .pageName("mainPage")
                 .arguments(arguments)
                 .navigate()
+
+//            val handler = FlutterHandler("functionTest", Int::class.java) {
+//
+//            }
+//
+//            handler.dispose()
+//
+//            FlutterFunction<Int>("functionTest").invoke(1, object : MethodChannel.Result {
+//                override fun success(result: Any?) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun notImplemented() {
+//                    TODO("Not yet implemented")
+//                }
+//
+//            })
         }
     }
 

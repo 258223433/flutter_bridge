@@ -1,7 +1,7 @@
 package com.dodo.flutterbridge.call.strategy
 
 import androidx.annotation.CallSuper
-import com.dodo.flutterbridge.call.CallHandler
+import com.dodo.flutterbridge.call.Handler
 import kotlin.jvm.Throws
 
 /**
@@ -14,7 +14,7 @@ import kotlin.jvm.Throws
 abstract class StickyHandlerStrategy <A> : HandlerStrategy<A> {
     private val stickyData = mutableMapOf<String, A>()
 
-    override fun addCallHandler(handler: CallHandler<A>) {
+    override fun addHandler(handler: Handler<A>) {
         val data = stickyData[handler.name]
         if (data !=null){
             handler.onCall(data)
