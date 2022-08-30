@@ -23,7 +23,7 @@ class FlutterLiveData<T : Any>(
     clazz: Class<T>,
     owner: LifecycleOwner? = null,
     override val invokerStrategy: InvokerStrategy<T> = SingleInvokerStrategy(Replace)
-) : LiveData<T>(), CallLeaf<T, T>, InvokerStrategy<T> by invokerStrategy {
+) : LiveData<T>(), CallLeaf<T, T>,Disposable, InvokerStrategy<T> by invokerStrategy {
 
 
     private val parent = DataNamedCallNode.create(name, clazz)
@@ -63,13 +63,12 @@ class FlutterLiveData<T : Any>(
         invoke(value, null)
     }
 
-    fun dispose() {
+    override fun dispose() {
         unlinkParent(parent)
     }
 
-
     override fun onCall(data: T): Any? {
-        Log.d("dodo", "${Thread.currentThread()}->$data")
+        Log.d("dodo", "FlutterLiveData onCall:${Thread.currentThread()}->$data")
         if (Looper.getMainLooper().thread == Thread.currentThread()) {
             super.setValue(data)
         } else {

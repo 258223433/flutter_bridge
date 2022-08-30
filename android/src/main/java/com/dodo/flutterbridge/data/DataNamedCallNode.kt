@@ -1,10 +1,12 @@
 package com.dodo.flutterbridge.data
 
 import com.dodo.flutterbridge.JsonMessageCodec
-import com.dodo.flutterbridge.call.BaseCallNode
+import com.dodo.flutterbridge.call.CallNode
 import com.dodo.flutterbridge.call.HandlerNode
-import com.dodo.flutterbridge.call.strategy.HandlerNotFoundException
-import com.dodo.flutterbridge.call.strategy.MutableHandlerException
+import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
+import com.dodo.flutterbridge.call.exception.MutableHandlerException
+import com.dodo.flutterbridge.call.strategy.HandlerStrategy
+import com.dodo.flutterbridge.call.strategy.InvokerStrategy
 import com.dodo.flutterbridge.call.strategy.MutableHandlerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy.ConflictType.Exception
@@ -16,30 +18,30 @@ import io.flutter.plugin.common.MethodChannel
  *     author : liuduo
  *     e-mail : liuduo@gyenno.com
  *     time   : 2022/08/16
- *     desc   : 带名字的data子callNode
- *              通过create方法创建
+ *     desc   : data的name节点,处理name的逻辑
  *     version: 1.0
  */
 class DataNamedCallNode<T> private constructor(
     override val name: String,
     private val clazz: Class<T>,
-) : BaseCallNode<T, FlutterCallInfo>(
-    MutableHandlerStrategy(),
-    SingleInvokerStrategy(Exception)
-) {
+) : CallNode<T, FlutterCallInfo> {
+
+    override val handlerStrategy: HandlerStrategy<T> = MutableHandlerStrategy()
+    override val invokerStrategy: InvokerStrategy<FlutterCallInfo> =
+        SingleInvokerStrategy(Exception)
 
     companion object {
 
         /**
-         * 缓存同名字的DataNamedCallGroup
+         * 缓存同名字的DataNamedCallNode
          */
         private val namedGroups = mutableMapOf<String, DataNamedCallNode<*>>()
 
         /**
-         * 创建或者复用一个DataNamedCallGroup
+         * 创建或者复用一个DataNamedCallNode
          * @param name String
          * @param clazz Class<T>
-         * @return DataNamedCallGroup<T>
+         * @return DataNamedCallNode<T>
          */
         fun <T> create(name: String, clazz: Class<T>): DataNamedCallNode<T> {
             if (namedGroups[name] == null) {
@@ -70,7 +72,7 @@ class DataNamedCallNode<T> private constructor(
         }
         return HandlerNode.StrategyData(
             data.methodInfo.name,
-            data.methodInfo.sticky,
+            true,
             rawData as T
         )
     }
@@ -94,4 +96,5 @@ class DataNamedCallNode<T> private constructor(
 
         }
     }
+
 }

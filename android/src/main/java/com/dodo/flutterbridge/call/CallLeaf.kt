@@ -4,7 +4,7 @@ package com.dodo.flutterbridge.call
  *     author : liuduo
  *     e-mail : liuduo@gyenno.com
  *     time   : 2022/08/16
- *     desc   :
+ *     desc   : 可以向上传递并且可以接收数据的叶子节点
  *     version: 1.0
  */
 interface CallLeaf<S, P> : Handler<P>, InvokerNode<S,P>{

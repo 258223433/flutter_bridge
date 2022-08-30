@@ -1,8 +1,8 @@
 package com.dodo.flutterbridge.function
 
 import com.dodo.flutterbridge.JsonMessageCodec
-import com.dodo.flutterbridge.call.BaseHandlerNode
 import com.dodo.flutterbridge.call.HandlerNode
+import com.dodo.flutterbridge.call.strategy.HandlerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy.ConflictType.Replace
 import com.dodo.flutterbridge.model.FlutterCallInfo
@@ -11,31 +11,32 @@ import com.dodo.flutterbridge.model.FlutterCallInfo
  *     author : liuduo
  *     e-mail : liuduo@gyenno.com
  *     time   : 2022/08/18
- *     desc   :
+ *     desc   : function的name节点,处理name的逻辑
  *     version: 1.0
  */
-class FunctionNamedHandlerNode<T>(
+class FunctionNamedHandlerNode<T> private constructor(
     override val name: String,
     private val clazz: Class<T>
-) : BaseHandlerNode<T, FlutterCallInfo>(SingleHandlerStrategy(Replace)) {
+) : HandlerNode<T, FlutterCallInfo> {
 
+    override val handlerStrategy: HandlerStrategy<T> = SingleHandlerStrategy(Replace)
 
     companion object {
 
         /**
-         * 缓存同名字的DataNamedCallGroup
+         * 缓存同名字的FunctionNamedHandlerNode
          */
         private val namedGroups = mutableMapOf<String, FunctionNamedHandlerNode<*>>()
 
         /**
-         * 创建或者复用一个DataNamedCallGroup
+         * 创建或者复用一个FunctionNamedHandlerNode
          * @param name String
          * @param clazz Class<T>
-         * @return DataNamedCallGroup<T>
+         * @return FunctionNamedHandlerNode<T>
          */
         fun <T> create(name: String, clazz: Class<T>): FunctionNamedHandlerNode<T> {
             if (namedGroups[name] == null) {
-                namedGroups[name] = FunctionNamedHandlerNode(name,clazz)
+                namedGroups[name] = FunctionNamedHandlerNode(name, clazz)
             }
             return namedGroups[name] as FunctionNamedHandlerNode<T>
         }
@@ -56,8 +57,9 @@ class FunctionNamedHandlerNode<T>(
         }
         return HandlerNode.StrategyData(
             data.methodInfo.name,
-            data.methodInfo.sticky,
+            false,
             rawData as T
         )
     }
+
 }

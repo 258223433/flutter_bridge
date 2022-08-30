@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.dodo.flutterbridge.example.databinding.FragmentFirstBinding
+import com.dodo.flutterbridge.function.FlutterFunction
+import io.flutter.plugin.common.MethodChannel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -35,11 +38,20 @@ class FirstFragment : Fragment() {
 
         binding.buttonFirst.setOnClickListener {
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-            val intent = Intent()
-            intent.putExtra("msg", "This message is from Native!!!")
-            requireActivity().setResult(Activity.RESULT_OK, intent) // 返回结果给dart
-            requireActivity().finish()
-//            super.finish()
+            FlutterFunction<Int>("nativeInvoke").invoke(1, object : MethodChannel.Result {
+                override fun success(result: Any?) {
+                    Toast.makeText(requireContext(),result.toString(),Toast.LENGTH_SHORT).show()
+                }
+
+                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                    Toast.makeText(requireContext(),errorMessage,Toast.LENGTH_SHORT).show()
+                }
+
+                override fun notImplemented() {
+                    Toast.makeText(requireContext(),"notImplemented",Toast.LENGTH_SHORT).show()
+                }
+
+            })
         }
     }
 

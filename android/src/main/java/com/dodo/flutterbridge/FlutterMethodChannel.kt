@@ -1,6 +1,5 @@
 package com.dodo.flutterbridge
 
-import com.dodo.flutterbridge.call.GlobalCallRoot
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.StandardMethodCodec

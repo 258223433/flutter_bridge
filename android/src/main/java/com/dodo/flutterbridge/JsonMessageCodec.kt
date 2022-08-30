@@ -16,26 +16,36 @@ import java.nio.ByteBuffer
  */
 class JsonMessageCodec : StandardMessageCodec() {
     companion object {
+        //json数据类型
         private const val JSON: Byte = 64
     }
 
     override fun writeValue(stream: ByteArrayOutputStream, value: Any) {
         try {
+            //先尝试使用父类来写数据
             super.writeValue(stream, value)
         } catch (e: IllegalArgumentException) {
+            //如果父类不支持该类型数据并抛出异常的话,我们来写json类型数据
+
+            //先写入json数据的类型
             stream.write(JSON.toInt())
+            //再把对象转换成json并写入这个string
             writeBytes(stream, GsonUtil.gson.toJson(value).toByteArray())
         }
     }
 
     override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
         return try {
+            //先尝试使用父类来读数据
             super.readValueOfType(type, buffer)
         } catch (e: IllegalArgumentException) {
+            //如果父类不支持该类型数据并抛出异常的话,我们来读json数据类型
             when (type) {
                 JSON -> {
+                    //转换成自定义的对象提供给外面判断使用
                     JsonString(String(readBytes(buffer)), GsonUtil.gson)
                 }
+                //如果不是json类型的话继续抛出异常
                 else -> throw e
             }
         }

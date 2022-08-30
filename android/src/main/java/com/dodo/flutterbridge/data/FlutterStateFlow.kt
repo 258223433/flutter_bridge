@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.dodo.flutterbridge.call.CallLeaf
+import com.dodo.flutterbridge.call.Disposable
 import com.dodo.flutterbridge.call.strategy.InvokerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy.ConflictType.Replace
@@ -23,7 +24,7 @@ class FlutterStateFlow<T : Any>(
     private val delegate: MutableStateFlow<T> = MutableStateFlow(initialState),
     owner: LifecycleOwner? = null,
     override val invokerStrategy: InvokerStrategy<T> = SingleInvokerStrategy(Replace)
-) : MutableStateFlow<T> by delegate, CallLeaf<T, T>, InvokerStrategy<T> by invokerStrategy {
+) : MutableStateFlow<T> by delegate, CallLeaf<T, T>,Disposable, InvokerStrategy<T> by invokerStrategy {
 
 
     private val parent = DataNamedCallNode.create(name, initialState.javaClass)
@@ -57,7 +58,7 @@ class FlutterStateFlow<T : Any>(
         invoke(value, null)
     }
 
-    fun dispose() {
+    override fun dispose() {
         unlinkParent(parent)
         Log.d("dodo", "dispose")
     }

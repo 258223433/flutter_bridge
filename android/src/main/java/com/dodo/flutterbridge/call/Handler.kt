@@ -1,7 +1,7 @@
 package com.dodo.flutterbridge.call
 
-import com.dodo.flutterbridge.call.strategy.HandlerNotFoundException
-import com.dodo.flutterbridge.call.strategy.MutableHandlerException
+import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
+import com.dodo.flutterbridge.call.exception.MutableHandlerException
 import kotlin.jvm.Throws
 
 /**
@@ -14,6 +14,13 @@ import kotlin.jvm.Throws
 
 interface Handler<P> : Named {
 
+    /**
+     * 接收数据并返回结果
+     * @param data P
+     * @return Any?
+     * @throws HandlerNotFoundException
+     * @throws MutableHandlerException
+     */
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
     fun onCall(data: P): Any?
 }

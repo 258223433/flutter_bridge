@@ -9,7 +9,15 @@ package com.dodo.flutterbridge.call
  */
 interface Handleable<S> {
 
+    /**
+     * 添加handler
+     * @param handler Handler<S>
+     */
     fun addHandler(handler: Handler<S>)
 
+    /**
+     * 移除handler
+     * @param handler Handler<S>
+     */
     fun removeHandler(handler: Handler<S>)
 }

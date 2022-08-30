@@ -1,12 +1,16 @@
-package com.dodo.flutterbridge.call
+package com.dodo.flutterbridge
 
-import com.dodo.flutterbridge.FlutterContext
+import com.dodo.flutterbridge.call.CallRoot
 import com.dodo.flutterbridge.call.HandlerNode.StrategyData
-import com.dodo.flutterbridge.call.strategy.HandlerNotFoundException
-import com.dodo.flutterbridge.call.strategy.MutableHandlerException
+import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
+import com.dodo.flutterbridge.call.exception.MutableHandlerException
+import com.dodo.flutterbridge.call.strategy.HandlerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy
-import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy.ConflictType.*
+import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy.ConflictType.Exception
 import com.dodo.flutterbridge.common.Constant
+import com.dodo.flutterbridge.common.GsonUtil
+import com.dodo.flutterbridge.data.DataCallNode
+import com.dodo.flutterbridge.function.FunctionCallNode
 import com.dodo.flutterbridge.model.FlutterCallInfo
 import com.dodo.flutterbridge.model.FlutterMethodInfo
 import io.flutter.plugin.common.MethodCall
@@ -20,16 +24,23 @@ import io.flutter.plugin.common.StandardMessageCodec
  *     desc   : 全局的MethodCallHandler
  *     version: 1.0
  */
-internal object GlobalCallRoot : BaseCallRoot<FlutterCallInfo, MethodCall>(
-    SingleHandlerStrategy(Exception)
-), MethodChannel.MethodCallHandler {
+internal object GlobalCallRoot : CallRoot<FlutterCallInfo, MethodCall>,
+    MethodChannel.MethodCallHandler {
 
-    override val name: String = Constant.Name.root_name
+    override val name: String = Constant.Name.ROOT_NAME
+
+    override val handlerStrategy: HandlerStrategy<FlutterCallInfo> =
+        SingleHandlerStrategy(Exception)
 
     /**
      * 虽然flutter里面定义了null的类型,但是[StandardMessageCodec.writeValue]中写入数据为非空,所以这里定义一个默认的返回值
      */
     private const val defaultResult = "null"
+
+    init {
+        linkChild(DataCallNode)
+        linkChild(FunctionCallNode)
+    }
 
     /**
      * 顶层调用 super.onCall来传递数据并处理异常
@@ -38,7 +49,7 @@ internal object GlobalCallRoot : BaseCallRoot<FlutterCallInfo, MethodCall>(
      */
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
-            super.onCall(call)
+            result.success(super.onCall(call))
         } catch (e: HandlerNotFoundException) {
             result.notImplemented()
         } catch (e: MutableHandlerException) {
@@ -60,7 +71,7 @@ internal object GlobalCallRoot : BaseCallRoot<FlutterCallInfo, MethodCall>(
         val callInfo = data.toFlutterCallInfo()
         return StrategyData(
             callInfo.methodInfo.type,
-            callInfo.methodInfo.sticky,
+            true,
             callInfo
         )
     }
@@ -68,15 +79,11 @@ internal object GlobalCallRoot : BaseCallRoot<FlutterCallInfo, MethodCall>(
 }
 
 fun MethodCall.toFlutterCallInfo(): FlutterCallInfo {
-//    val methodInfo = GsonUtil.gson.fromJson(method, FlutterMethodInfo::class.java)
-    val methodInfo = FlutterMethodInfo(method)
-    methodInfo.type = "data"
-    methodInfo.sticky = true
-    FlutterCallInfo(methodInfo, arguments)
+    val methodInfo = GsonUtil.gson.fromJson(method, FlutterMethodInfo::class.java)
     return FlutterCallInfo(methodInfo, arguments)
 }
 
 fun FlutterCallInfo.toMethodCall(): MethodCall {
-//    val method = GsonUtil.gson.toJson(methodInfo)
-    return MethodCall(methodInfo.name, data)
+    val method = GsonUtil.gson.toJson(methodInfo)
+    return MethodCall(method, data)
 }

@@ -3,7 +3,7 @@ package com.dodo.flutterbridge
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import com.dodo.flutterbridge.FlutterContext.FLUTTER_CHANNEL_METHOD_READY
+import com.dodo.flutterbridge.common.Constant
 import com.dodo.flutterbridge.data.FlutterLiveData
 import com.idlefish.flutterboost.FlutterBoost
 import com.idlefish.flutterboost.FlutterBoostDelegate
@@ -73,8 +73,8 @@ object FlutterBridge {
             }) { engine ->
                 FlutterContext.globalEngine = engine
                 FlutterContext.globalChannel =
-                    FlutterMethodChannel(engine, FlutterContext.GLOBAL_FLUTTER_CHANNEL_NAME)
-                val ready = FlutterLiveData(FLUTTER_CHANNEL_METHOD_READY, Int::class.java)
+                    FlutterMethodChannel(engine, Constant.Channel.GLOBAL_FLUTTER_CHANNEL_NAME)
+                val ready = FlutterLiveData(Constant.Method.FLUTTER_CHANNEL_METHOD_READY, Int::class.java)
                 ready.observeForever {
                     onInit?.invoke()
                     ready.dispose()

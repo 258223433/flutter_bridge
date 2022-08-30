@@ -12,6 +12,4 @@ import io.flutter.embedding.engine.FlutterEngine
 object FlutterContext {
     lateinit var globalEngine: FlutterEngine
     lateinit var globalChannel: FlutterMethodChannel
-    const val GLOBAL_FLUTTER_CHANNEL_NAME = "com.dodo.flutterbridge.global_flutter_channel"
-    const val FLUTTER_CHANNEL_METHOD_READY = "com.dodo.flutterbridge.method_ready"
 }

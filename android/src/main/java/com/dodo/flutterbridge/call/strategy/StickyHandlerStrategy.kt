@@ -2,18 +2,21 @@ package com.dodo.flutterbridge.call.strategy
 
 import androidx.annotation.CallSuper
 import com.dodo.flutterbridge.call.Handler
+import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
+import com.dodo.flutterbridge.call.exception.MutableHandlerException
 import kotlin.jvm.Throws
 
 /**
  *     author : liuduo
  *     e-mail : liuduo@gyenno.com
  *     time   : 2022/08/12
- *     desc   :
+ *     desc   : 处理粘性数据
  *     version: 1.0
  */
 abstract class StickyHandlerStrategy <A> : HandlerStrategy<A> {
     private val stickyData = mutableMapOf<String, A>()
 
+    @CallSuper
     override fun addHandler(handler: Handler<A>) {
         val data = stickyData[handler.name]
         if (data !=null){

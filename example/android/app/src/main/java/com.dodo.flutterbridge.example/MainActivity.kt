@@ -3,6 +3,7 @@ package com.dodo.flutterbridge.example
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -45,15 +46,16 @@ class MainActivity : AppCompatActivity() {
                 .arguments(arguments)
                 .navigate()
 
-//            val handler = FlutterHandler("functionTest", Int::class.java) {
-//
-//            }
+            val handler = FlutterHandler("flutterInvoke", Int::class.java) {
+                Toast.makeText(applicationContext,it.toString(),Toast.LENGTH_SHORT).show()
+                return@FlutterHandler it.plus(1)
+            }
 //
 //            handler.dispose()
 //
 //            FlutterFunction<Int>("functionTest").invoke(1, object : MethodChannel.Result {
 //                override fun success(result: Any?) {
-//                    TODO("Not yet implemented")
+//                    assert(result==4)
 //                }
 //
 //                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {

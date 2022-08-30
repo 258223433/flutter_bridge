@@ -50,3 +50,5 @@ class JsonString {
     return "JsonString(jsonString='$jsonString')";
   }
 }
+
+typedef FromJson<T> = T Function(Map<String, dynamic> json);

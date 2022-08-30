@@ -4,7 +4,7 @@ package com.dodo.flutterbridge.call
  *     author : liuduo
  *     e-mail : liuduo@gyenno.com
  *     time   : 2022/08/18
- *     desc   :
+ *     desc   : 可以向下传递并且可以调用的根节点
  *     version: 1.0
  */
 interface CallRoot<S, P>:HandlerNode<S,P>,Invoker<S>{

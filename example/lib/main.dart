@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bridge/flutter_bridge.dart';
@@ -21,6 +23,11 @@ class UserInfo {
         'name': name,
         'count': count,
       };
+
+  @override
+  String toString() {
+    return 'UserInfo{name: $name, count: $count}';
+  }
 }
 
 void main() {
@@ -160,6 +167,7 @@ class SimplePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NativeHandler<int>("nativeInvoke",(data)async => data+1);
     return Scaffold(
       body: Center(
         child: Column(
@@ -195,6 +203,17 @@ class SimplePage extends StatelessWidget {
                       );
                     },
                   ),
+                  Consumer<NativeData<UserInfo?>>(
+                    builder: (context, notifier, child) {
+                      return TextButton(
+                        onPressed: () {
+                          NativeFunction<int>("flutterInvoke").invoke(notifier.value!.count)
+                              .then((value) => print('bridge example flutterInvoke result:$value'));
+                        },
+                        child: const Text('flutterInvoke'),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -203,7 +222,7 @@ class SimplePage extends StatelessWidget {
               onPressed: () {
                 BoostNavigator.instance
                     .push("mainActivity")
-                    .then((value) => print('yyzddd:$value'));
+                    .then((value) => print('bridge example onResult:$value'));
               },
               child: const Text('Next'),
             ),

@@ -59,9 +59,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v3.0-null-safety-flutter3.0-release.2.1"
-      resolved-ref: "0ee708f9d09d2cbd43f8ce5eccef0fe251ae1e04"
-      url: "https://github.com/258223433/flutter_boost.git"
+      ref: "v3.0-null-safety-release.2.2"
+      resolved-ref: "6911dae9e82c22a256c04231fec9a787c1b6b1fa"
+      url: "https://github.com/alibaba/flutter_boost.git"
     source: git
     version: "3.0.0"
   flutter_lints:

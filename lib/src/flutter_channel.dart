@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
+import 'package:flutter_bridge/src/global_call_root.dart';
 import 'package:flutter_bridge/src/json_message_codec.dart';
 
 ///   author : liuduo
@@ -9,11 +9,11 @@ import 'package:flutter_bridge/src/json_message_codec.dart';
 ///   version: 1.0
 class FlutterChannel {
   late MethodChannel delegate;
-  late FlutterMethodCallHandler flutterMethodCallHandler;
+  late GlobalCallRoot flutterMethodCallHandler;
 
   FlutterChannel(String channelName) {
     delegate = MethodChannel(channelName,StandardMethodCodec(JsonMessageCodec()));
-    flutterMethodCallHandler = FlutterMethodCallHandler();
+    flutterMethodCallHandler = GlobalCallRoot();
     delegate.setMethodCallHandler(flutterMethodCallHandler.methodCallHandler);
     print("flutter_bridge FlutterChannel init");
   }
@@ -22,11 +22,4 @@ class FlutterChannel {
     return delegate.invokeMethod<T>(method, arguments);
   }
 
-  void addObserver(String name, OnCallObserver observer) {
-    flutterMethodCallHandler.addObserver(name, observer);
-  }
-
-  void removeObserver(String name, OnCallObserver observer) {
-    flutterMethodCallHandler.removeObserver(name,observer);
-  }
 }

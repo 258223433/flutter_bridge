@@ -1,48 +1,57 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bridge/src/flutter_context.dart';
-import 'package:flutter_bridge/src/flutter_method_call_handler.dart';
-import 'package:flutter_bridge/src/type_on_call_observer.dart';
+import 'package:flutter_bridge/src/call/call_leaf.dart';
+import 'package:flutter_bridge/src/call/disposable.dart';
+import 'package:flutter_bridge/src/call/invoker_node.dart';
+import 'package:flutter_bridge/src/call/strategy/invoker_strategy.dart';
+import 'package:flutter_bridge/src/call/strategy/single_invoker_strategy.dart';
+import 'package:flutter_bridge/src/data/data_named_call_node.dart';
+import 'package:flutter_bridge/src/json_message_codec.dart';
 
 ///   author : liuduo
 ///   e-mail : liuduo@gyenno.com
 ///   time   : 2022/07/20
 ///   desc   : 和原生交互的数据
 ///   version: 1.0
-///todo 数据粘性
-class NativeData<T> extends ValueNotifier<T> with TypeOnCallObserver<T, void> {
+class NativeData<T> extends ValueNotifier<T>
+    with InvokerNode<T, T>, CallLeaf<T, T>
+    implements Disposable {
+  @override
   String name;
-  final _channel = FlutterContext
-      .instance()
-      .globalChannel;
+
+  @override
+  InvokerStrategy<T> invokerStrategy =
+      SingleInvokerStrategy(SingleInvokerConflictType.replace);
+
   List<Completer<T>> completerList = [];
   final FromJson<T>? _fromJson;
 
+  late DataNamedCallNode<T> _parent;
+
   NativeData(this.name, super.value, [this._fromJson]) {
+    _parent = DataNamedCallNode<T>.create(name, _fromJson);
+    linkParent(_parent);
     if (value != null) {
       _setNativeValue(value);
     }
-    _channel.addObserver(name, this);
   }
 
   @override
   set value(T newValue) {
     _setNativeValue(newValue);
-    super.value = newValue;
   }
 
   @override
   void dispose() {
-    _channel.removeObserver(name, this);
+    unlinkParent(_parent);
     completerList.clear();
     super.dispose();
     print("flutter_bridge NativeData dispose");
   }
 
   void _setNativeValue(T value) {
-    _channel.invokeMethod(name, value);
+    invoke(value);
   }
 
   @override
@@ -68,18 +77,12 @@ class NativeData<T> extends ValueNotifier<T> with TypeOnCallObserver<T, void> {
   }
 
   @override
-  void onCallOfType(T data) {
-    print("flutter_bridge NativeData onCall");
-    super.value = data;
-  }
+  T encodeData(T data) => data;
 
   @override
-  T fromJsom(Map<String, dynamic> json) {
-    if (_fromJson == null) {
-      throw Exception("NativeData 请通过构造方法传递fromJson");
-    }
-    return _fromJson!.call(json);
+  Future<dynamic> onCall(T data) {
+    print("flutter_bridge NativeData onCall $data");
+    super.value = data;
+    return Future.value(null);
   }
 }
-
-typedef FromJson<T> = T Function(Map<String, dynamic> json);

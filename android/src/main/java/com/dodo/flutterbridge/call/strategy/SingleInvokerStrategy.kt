@@ -1,6 +1,7 @@
 package com.dodo.flutterbridge.call.strategy
 
 import com.dodo.flutterbridge.call.Invoker
+import com.dodo.flutterbridge.call.exception.InvokerNotFoundException
 import io.flutter.plugin.common.MethodChannel
 import kotlin.jvm.Throws
 
@@ -8,7 +9,7 @@ import kotlin.jvm.Throws
  *     author : liuduo
  *     e-mail : liuduo@gyenno.com
  *     time   : 2022/08/18
- *     desc   :
+ *     desc   : 只保存单个invoker,可设置冲突处理方式
  *     version: 1.0
  */
 class SingleInvokerStrategy<A>(

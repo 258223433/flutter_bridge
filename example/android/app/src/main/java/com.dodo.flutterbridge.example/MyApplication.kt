@@ -22,7 +22,7 @@ class MyApplication : Application() {
         FlutterBridge.init(this) {
             count = FlutterLiveData("count", UserInfo::class.java)
             thread {
-                repeat(1000) {
+                repeat(10) {
                     Thread.sleep(1000)
                     if (count.value != null) {
                         Log.d("dodo","user count"+count.value!!.count)

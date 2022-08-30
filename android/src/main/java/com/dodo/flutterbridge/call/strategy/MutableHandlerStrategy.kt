@@ -1,6 +1,8 @@
 package com.dodo.flutterbridge.call.strategy
 
 import com.dodo.flutterbridge.call.Handler
+import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
+import com.dodo.flutterbridge.call.exception.MutableHandlerException
 
 /**
  *     author : liuduo
@@ -14,6 +16,7 @@ class MutableHandlerStrategy<A> : StickyHandlerStrategy<A>() {
     private val handlers = mutableMapOf<String, MutableList<Handler<A>>>()
 
     override fun addHandler(handler: Handler<A>) {
+        super.addHandler(handler)
         val name = handler.name
         var list = handlers[name]
         if (list == null) {
@@ -24,10 +27,11 @@ class MutableHandlerStrategy<A> : StickyHandlerStrategy<A>() {
     }
 
     override fun removeHandler(handler: Handler<A>) {
-        val list = handlers[handler.name]
-        list?.forEach {
-            if (it == handler) {
-                list.remove(it)
+        val list = handlers[handler.name] ?: return
+        val each = list.iterator()
+        while (each.hasNext()) {
+            if (handler == each.next()) {
+                each.remove()
             }
         }
     }

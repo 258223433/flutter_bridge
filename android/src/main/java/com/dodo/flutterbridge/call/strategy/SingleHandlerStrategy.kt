@@ -1,7 +1,8 @@
 package com.dodo.flutterbridge.call.strategy
 
 import com.dodo.flutterbridge.call.Handler
-import kotlin.jvm.Throws
+import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
+import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy.ConflictType
 
 /**
  *     author : liuduo
@@ -19,6 +20,7 @@ class SingleHandlerStrategy<A>(
     private val handlers = mutableMapOf<String, Handler<A>>()
 
     override fun addHandler(handler: Handler<A>) {
+        super.addHandler(handler)
         if (handlers[handler.name] == null) {
             handlers[handler.name] = handler
         } else {
@@ -60,7 +62,7 @@ class SingleHandlerStrategy<A>(
             when (this) {
                 Replace -> handlers[handler.name] = handler
                 Ignore -> {}
-                Exception -> throw Exception("同名字的Handler已存在")
+                Exception -> throw Exception("同名字的handler已存在")
             }
         }
     }

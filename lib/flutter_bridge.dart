@@ -6,9 +6,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bridge/src/flutter_bridge_app.dart';
 import 'package:flutter_bridge/src/flutter_channel.dart';
 import 'package:flutter_bridge/src/flutter_context.dart';
-import 'package:flutter_bridge/src/native_data.dart';
+import 'package:flutter_bridge/src/data/native_data.dart';
 
-export 'src/native_data.dart';
+export 'src/data/native_data.dart';
+export 'src/function/native_function.dart';
+export 'src/function/native_handler.dart';
 export 'src/flutter_bridge_app.dart';
 
 class FlutterBridge {

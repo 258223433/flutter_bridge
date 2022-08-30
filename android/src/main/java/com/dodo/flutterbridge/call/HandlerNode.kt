@@ -1,15 +1,15 @@
 package com.dodo.flutterbridge.call
 
-import com.dodo.flutterbridge.call.strategy.HandlerNotFoundException
+import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
 import com.dodo.flutterbridge.call.strategy.HandlerStrategy
-import com.dodo.flutterbridge.call.strategy.MutableHandlerException
+import com.dodo.flutterbridge.call.exception.MutableHandlerException
 import kotlin.jvm.Throws
 
 /**
  *     author : liuduo
  *     e-mail : liuduo@gyenno.com
  *     time   : 2022/08/17
- *     desc   :
+ *     desc   : 可以向下传递的handler节点
  *     version: 1.0
  */
 interface HandlerNode<S, P>:Handleable<S>,Handler<P> {
@@ -19,6 +19,14 @@ interface HandlerNode<S, P>:Handleable<S>,Handler<P> {
     override fun onCall(data: P): Any? {
         val decodeData = decodeData(data)
         return handlerStrategy.onCallStrategy(decodeData.name, decodeData.sticky, decodeData.data)
+    }
+
+    override fun addHandler(handler: Handler<S>) {
+        handlerStrategy.addHandler(handler)
+    }
+
+    override fun removeHandler(handler: Handler<S>) {
+        handlerStrategy.removeHandler(handler)
     }
 
     /**
