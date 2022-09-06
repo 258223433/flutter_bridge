@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bridge/flutter_bridge.dart';
@@ -7,10 +5,10 @@ import 'package:flutter_boost/flutter_boost.dart';
 import 'package:provider/provider.dart';
 
 class UserInfo {
-  var name = "test";
-  var count = 0;
+  final String name;
+  final int count;
 
-  UserInfo(this.name, this.count);
+  const UserInfo(this.name, this.count);
 
   factory UserInfo.fromJson(Map<String, dynamic> json) {
     return UserInfo(
@@ -78,37 +76,37 @@ class AppLifecycleObserver with GlobalPageVisibilityObserver {
   @override
   void onBackground(Route route) {
     super.onBackground(route);
-    print("AppLifecycleObserver - onBackground");
+    debugPrint("AppLifecycleObserver - onBackground");
   }
 
   @override
   void onForeground(Route route) {
     super.onForeground(route);
-    print("AppLifecycleObserver - onForground");
+    debugPrint("AppLifecycleObserver - onForground");
   }
 
   @override
   void onPagePush(Route route) {
     super.onPagePush(route);
-    print("AppLifecycleObserver - onPagePush");
+    debugPrint("AppLifecycleObserver - onPagePush");
   }
 
   @override
   void onPagePop(Route route) {
     super.onPagePop(route);
-    print("AppLifecycleObserver - onPagePop");
+    debugPrint("AppLifecycleObserver - onPagePop");
   }
 
   @override
   void onPageHide(Route route) {
     super.onPageHide(route);
-    print("AppLifecycleObserver - onPageHide");
+    debugPrint("AppLifecycleObserver - onPageHide");
   }
 
   @override
   void onPageShow(Route route) {
     super.onPageShow(route);
-    print("AppLifecycleObserver - onPageShow");
+    debugPrint("AppLifecycleObserver - onPageShow");
   }
 }
 
@@ -165,6 +163,8 @@ class SimplePage extends StatelessWidget {
 
   SimplePage({required this.data});
 
+
+
   @override
   Widget build(BuildContext context) {
     NativeHandler<int>("nativeInvoke",(data)async => data+1);
@@ -208,7 +208,7 @@ class SimplePage extends StatelessWidget {
                       return TextButton(
                         onPressed: () {
                           NativeFunction<int>("flutterInvoke").invoke(notifier.value!.count)
-                              .then((value) => print('bridge example flutterInvoke result:$value'));
+                              .then((value) => debugPrint('bridge example flutterInvoke result:$value'));
                         },
                         child: const Text('flutterInvoke'),
                       );
@@ -222,7 +222,7 @@ class SimplePage extends StatelessWidget {
               onPressed: () {
                 BoostNavigator.instance
                     .push("mainActivity")
-                    .then((value) => print('bridge example onResult:$value'));
+                    .then((value) => debugPrint('bridge example onResult:$value'));
               },
               child: const Text('Next'),
             ),

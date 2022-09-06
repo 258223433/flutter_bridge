@@ -47,7 +47,7 @@ class NativeData<T> extends ValueNotifier<T>
     unlinkParent(_parent);
     completerList.clear();
     super.dispose();
-    print("flutter_bridge NativeData dispose");
+    debugPrint("flutter_bridge NativeData dispose");
   }
 
   void _setNativeValue(T value) {
@@ -81,7 +81,7 @@ class NativeData<T> extends ValueNotifier<T>
 
   @override
   Future<dynamic> onCall(T data) {
-    print("flutter_bridge NativeData onCall $data");
+    debugPrint("flutter_bridge NativeData onCall $data");
     super.value = data;
     return Future.value(null);
   }

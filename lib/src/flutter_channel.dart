@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bridge/src/global_call_root.dart';
 import 'package:flutter_bridge/src/json_message_codec.dart';
@@ -15,7 +16,7 @@ class FlutterChannel {
     delegate = MethodChannel(channelName,StandardMethodCodec(JsonMessageCodec()));
     flutterMethodCallHandler = GlobalCallRoot();
     delegate.setMethodCallHandler(flutterMethodCallHandler.methodCallHandler);
-    print("flutter_bridge FlutterChannel init");
+    debugPrint("flutter_bridge FlutterChannel init");
   }
 
   Future<T?> invokeMethod<T>(String method, [dynamic arguments]) {

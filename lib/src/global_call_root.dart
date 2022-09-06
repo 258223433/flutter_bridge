@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bridge/src/call/call_root.dart';
 import 'package:flutter_bridge/src/call/exception/handler_not_found_exception.dart';
@@ -26,7 +27,7 @@ class GlobalCallRoot
   static const String defaultResult = "null";
 
   Future<dynamic> methodCallHandler(MethodCall call) {
-    print("flutter_bridge methodCallHandler");
+    debugPrint("flutter_bridge methodCallHandler");
     try {
       return super.onCall(call);
     }on HandlerNotFoundException{
