@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_bridge'
-  s.version          = '0.0.2'
+  s.version          = '0.0.3'
   s.summary          = 'A new Flutter plugin make flutter better to use!'
   s.description      = <<-DESC
 A new Flutter plugin make flutter better to use!

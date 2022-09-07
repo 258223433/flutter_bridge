@@ -40,28 +40,27 @@
     if (name == nil || name.length == 0) {
         return;
     }
-    
+
     // 存储粘性数据
     [[GYEStickinessManager share] addStickDataWithName:name data:data];
-    
-    for (GYEOnCallObserverWrapper *observer in self.observers) {
-        if (observer.wrapped && ([observer.name isEqualToString:name] || [observer.name isEqualToString:GYEFlutterMethodName_All])) {
-            
-            GYEMethodCallNotify *noti = [[GYEMethodCallNotify alloc] initWithMethodName:name arguments:data];
-            if ([observer.wrapped respondsToSelector:@selector(onCallNotify:)]) {
-                [observer.wrapped onCallNotify:noti];
-            }
-            // todo 这里可以先转换成字典，再分发给原生；而 分发给 flutter 需要以model形式分发，才能进入自定义编码
-//            id newData = [data mj_keyValues];
 
-            // block 回调
-            if (observer.wrapped && observer.liveDataCallback) {
-                observer.liveDataCallback(noti);
+    [self.observers enumerateObjectsUsingBlock:^(GYEOnCallObserverWrapper * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (obj.wrapped && ([obj.name isEqualToString:name] || [obj.name isEqualToString:GYEFlutterMethodName_All])) {
+
+                GYEMethodCallNotify *noti = [[GYEMethodCallNotify alloc] initWithMethodName:name arguments:data];
+                if ([obj.wrapped respondsToSelector:@selector(onCallNotify:)]) {
+                    [obj.wrapped onCallNotify:noti];
+                }
+                // todo 这里可以先转换成字典，再分发给原生；而 分发给 flutter 需要以model形式分发，才能进入自定义编码
+    //            id newData = [data mj_keyValues];
+
+                // block 回调
+                if (obj.wrapped && obj.liveDataCallback) {
+                    obj.liveDataCallback(noti);
+                }
             }
-        }
-        
-    }
-    
+    }];
+
 }
 
 /// 添加监听
