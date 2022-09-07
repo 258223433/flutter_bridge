@@ -7,12 +7,12 @@ package com.dodo.flutterbridge.call
  *     desc   : 可以向上传递并且可以接收数据的叶子节点
  *     version: 1.0
  */
-interface CallLeaf<S, P> : Handler<P>, InvokerNode<S,P>{
+interface CallLeaf<S, P> : Handler<P>, InvokerNode<S, P> {
     /**
      * 和父节点连接
      * @param callRoot CallRoot<P, *>
      */
-    fun linkParent(callRoot: CallRoot<P,*>){
+    fun linkParent(callRoot: CallRoot<P, *>) {
         callRoot.addHandler(this)
         attachInvoker(callRoot)
     }
@@ -21,7 +21,7 @@ interface CallLeaf<S, P> : Handler<P>, InvokerNode<S,P>{
      * 和父节点断开连接
      * @param callRoot CallRoot<P, *>
      */
-    fun unlinkParent(callRoot: CallRoot<P,*>){
+    fun unlinkParent(callRoot: CallRoot<P, *>) {
         callRoot.removeHandler(this)
         detachInvoker(callRoot)
     }

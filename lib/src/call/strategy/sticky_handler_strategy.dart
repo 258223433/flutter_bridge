@@ -14,7 +14,8 @@ abstract class StickyHandlerStrategy<A> implements HandlerStrategy<A> {
   @override
   void addHandler(Handler<A> handler) {
     var data = _stickyData[handler.name];
-    debugPrint("flutter_bridge StickyHandlerStrategy addHandler ${handler.name}  $data");
+    debugPrint(
+        "flutter_bridge StickyHandlerStrategy addHandler ${handler.name}  $data");
     if (data != null) {
       try {
         handler.onCall(data);
@@ -25,7 +26,8 @@ abstract class StickyHandlerStrategy<A> implements HandlerStrategy<A> {
   @mustCallSuper
   @override
   Future<dynamic> onCallStrategy(String name, bool sticky, A data) {
-    debugPrint("flutter_bridge StickyHandlerStrategy onCallStrategy $name $sticky $data");
+    debugPrint(
+        "flutter_bridge StickyHandlerStrategy onCallStrategy $name $sticky $data");
     if (sticky) {
       _stickyData[name] = data;
     }

@@ -3,7 +3,6 @@ package com.dodo.flutterbridge
 import com.idlefish.flutterboost.FlutterBoost
 import com.idlefish.flutterboost.FlutterBoostRouteOptions
 import com.idlefish.flutterboost.containers.FlutterBoostFragment
-import java.lang.reflect.Type
 
 /**
  *     author : liuduo

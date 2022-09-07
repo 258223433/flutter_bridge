@@ -74,7 +74,8 @@ object FlutterBridge {
                 FlutterContext.globalEngine = engine
                 FlutterContext.globalChannel =
                     FlutterMethodChannel(engine, Constant.Channel.GLOBAL_FLUTTER_CHANNEL_NAME)
-                val ready = FlutterLiveData(Constant.Method.FLUTTER_CHANNEL_METHOD_READY, Int::class.java)
+                val ready =
+                    FlutterLiveData(Constant.Method.FLUTTER_CHANNEL_METHOD_READY, Int::class.java)
                 ready.observeForever {
                     onInit?.invoke()
                     ready.dispose()

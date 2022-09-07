@@ -7,4 +7,4 @@ package com.dodo.flutterbridge.call.exception
  *     desc   : 调用链上有多个handler
  *     version: 1.0
  */
-class MutableHandlerException: Exception()
+class MutableHandlerException : Exception()

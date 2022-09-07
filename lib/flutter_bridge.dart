@@ -1,17 +1,17 @@
 library flutter_bridge;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_boost/flutter_boost.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_boost/flutter_boost.dart';
+import 'package:flutter_bridge/src/data/native_data.dart';
 import 'package:flutter_bridge/src/flutter_bridge_app.dart';
 import 'package:flutter_bridge/src/flutter_channel.dart';
 import 'package:flutter_bridge/src/flutter_context.dart';
-import 'package:flutter_bridge/src/data/native_data.dart';
 
 export 'src/data/native_data.dart';
+export 'src/flutter_bridge_app.dart';
 export 'src/function/native_function.dart';
 export 'src/function/native_handler.dart';
-export 'src/flutter_bridge_app.dart';
 
 class FlutterBridge {
   var flutterContext = FlutterContext.instance();
@@ -22,8 +22,9 @@ class FlutterBridge {
 
   FlutterBridge init() {
     _FlutterBridgeBinding();
-    flutterContext.globalChannel = FlutterChannel(FlutterContext.globalFlutterChannelName);
-    NativeData(FlutterContext.flutterChannelMethodReady,0);
+    flutterContext.globalChannel =
+        FlutterChannel(FlutterContext.globalFlutterChannelName);
+    NativeData(FlutterContext.flutterChannelMethodReady, 0);
     return this;
   }
 

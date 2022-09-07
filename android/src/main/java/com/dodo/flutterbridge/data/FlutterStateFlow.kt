@@ -8,7 +8,7 @@ import com.dodo.flutterbridge.call.Disposable
 import com.dodo.flutterbridge.call.strategy.InvokerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy.ConflictType.Replace
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 /**
@@ -24,7 +24,8 @@ class FlutterStateFlow<T : Any>(
     private val delegate: MutableStateFlow<T> = MutableStateFlow(initialState),
     owner: LifecycleOwner? = null,
     override val invokerStrategy: InvokerStrategy<T> = SingleInvokerStrategy(Replace)
-) : MutableStateFlow<T> by delegate, CallLeaf<T, T>,Disposable, InvokerStrategy<T> by invokerStrategy {
+) : MutableStateFlow<T> by delegate, CallLeaf<T, T>, Disposable,
+    InvokerStrategy<T> by invokerStrategy {
 
 
     private val parent = DataNamedCallNode.create(name, initialState.javaClass)

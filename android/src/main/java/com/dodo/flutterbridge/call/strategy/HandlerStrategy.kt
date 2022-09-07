@@ -3,7 +3,6 @@ package com.dodo.flutterbridge.call.strategy
 import com.dodo.flutterbridge.call.Handleable
 import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
 import com.dodo.flutterbridge.call.exception.MutableHandlerException
-import kotlin.jvm.Throws
 
 /**
  *     author : liuduo

@@ -16,8 +16,8 @@ class SingleHandlerStrategy<A> extends StickyHandlerStrategy<A> {
   @override
   onCallNoSticky(String name, A data) {
     var handler = _handlers[name];
-    if(handler == null){
-      throw  HandlerNotFoundException();
+    if (handler == null) {
+      throw HandlerNotFoundException();
     }
     return handler.onCall(data);
   }

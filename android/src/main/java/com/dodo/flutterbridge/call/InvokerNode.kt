@@ -3,7 +3,6 @@ package com.dodo.flutterbridge.call
 import com.dodo.flutterbridge.call.exception.InvokerNotFoundException
 import com.dodo.flutterbridge.call.strategy.InvokerStrategy
 import io.flutter.plugin.common.MethodChannel
-import kotlin.jvm.Throws
 
 /**
  *     author : liuduo
@@ -12,7 +11,7 @@ import kotlin.jvm.Throws
  *     desc   : 可以向上传递的invoker节点
  *     version: 1.0
  */
-interface InvokerNode<S,P>:InvokeAttachable<P>,Invoker<S> {
+interface InvokerNode<S, P> : InvokeAttachable<P>, Invoker<S> {
 
     /**
      * invoker策略

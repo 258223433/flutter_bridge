@@ -11,7 +11,6 @@ import 'package:flutter_bridge/src/call/strategy/sticky_handler_strategy.dart';
 class MutableHandlerStrategy<A> extends StickyHandlerStrategy<A> {
   final Map<String, List<Handler<A>>> _handlers = {};
 
-
   @override
   void addHandler(Handler<A> handler) {
     super.addHandler(handler);

@@ -19,14 +19,14 @@ class FlutterMethodInfo implements Named {
     var info = FlutterMethodInfo(
       json['name'] as String,
     );
-    info.type =  json['type'] as String;
+    info.type = json['type'] as String;
     return info;
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'name': name,
-    'type': type,
-  };
+        'name': name,
+        'type': type,
+      };
 
   @override
   String toString() {

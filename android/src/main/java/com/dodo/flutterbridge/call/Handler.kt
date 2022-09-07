@@ -2,7 +2,6 @@ package com.dodo.flutterbridge.call
 
 import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
 import com.dodo.flutterbridge.call.exception.MutableHandlerException
-import kotlin.jvm.Throws
 
 /**
  *     author : liuduo
