@@ -2,8 +2,8 @@ package com.dodo.flutterbridge.call.strategy
 
 import com.dodo.flutterbridge.call.Invoker
 import com.dodo.flutterbridge.call.exception.InvokerNotFoundException
+import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy.ConflictType
 import io.flutter.plugin.common.MethodChannel
-import kotlin.jvm.Throws
 
 /**
  *     author : liuduo

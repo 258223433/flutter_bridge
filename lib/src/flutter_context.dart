@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_bridge/src/flutter_channel.dart';
 
 ///   author : liuduo
@@ -6,12 +5,14 @@ import 'package:flutter_bridge/src/flutter_channel.dart';
 ///   time   : 2022/07/21
 ///   desc   :
 ///   version: 1.0
-class FlutterContext{
-  static const globalFlutterChannelName = "com.dodo.flutterbridge.global_flutter_channel";
-  static const flutterChannelMethodReady = "com.dodo.flutterbridge.method_ready";
+class FlutterContext {
+  static const globalFlutterChannelName =
+      "com.dodo.flutterbridge.global_flutter_channel";
+  static const flutterChannelMethodReady =
+      "com.dodo.flutterbridge.method_ready";
   late final FlutterChannel globalChannel;
 
-  FlutterContext._() ;
+  FlutterContext._();
 
   static final FlutterContext _instance = FlutterContext._();
 

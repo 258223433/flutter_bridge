@@ -1,9 +1,8 @@
 package com.dodo.flutterbridge.call
 
 import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
-import com.dodo.flutterbridge.call.strategy.HandlerStrategy
 import com.dodo.flutterbridge.call.exception.MutableHandlerException
-import kotlin.jvm.Throws
+import com.dodo.flutterbridge.call.strategy.HandlerStrategy
 
 /**
  *     author : liuduo
@@ -12,7 +11,7 @@ import kotlin.jvm.Throws
  *     desc   : 可以向下传递的handler节点
  *     version: 1.0
  */
-interface HandlerNode<S, P>:Handleable<S>,Handler<P> {
+interface HandlerNode<S, P> : Handleable<S>, Handler<P> {
     val handlerStrategy: HandlerStrategy<S>
 
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)

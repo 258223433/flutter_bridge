@@ -2,7 +2,6 @@ package com.dodo.flutterbridge.call
 
 import com.dodo.flutterbridge.call.exception.InvokerNotFoundException
 import io.flutter.plugin.common.MethodChannel
-import kotlin.jvm.Throws
 
 /**
  *     author : liuduo

@@ -46,7 +46,7 @@ class DataNamedCallNode<T>
 
   @override
   InvokerStrategy<FlutterCallInfo> invokerStrategy =
-  SingleInvokerStrategy(SingleInvokerConflictType.exception);
+      SingleInvokerStrategy(SingleInvokerConflictType.exception);
 
   @override
   String name;
@@ -71,7 +71,7 @@ class DataNamedCallNode<T>
   Future<dynamic> invoke(T data) {
     try {
       handlerStrategy.onCallStrategy(name, true, data);
-    }on Exception{}
+    } on Exception {}
     return super.invoke(data);
   }
 }

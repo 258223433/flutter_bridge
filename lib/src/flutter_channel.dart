@@ -13,7 +13,8 @@ class FlutterChannel {
   late GlobalCallRoot flutterMethodCallHandler;
 
   FlutterChannel(String channelName) {
-    delegate = MethodChannel(channelName,StandardMethodCodec(JsonMessageCodec()));
+    delegate =
+        MethodChannel(channelName, StandardMethodCodec(JsonMessageCodec()));
     flutterMethodCallHandler = GlobalCallRoot();
     delegate.setMethodCallHandler(flutterMethodCallHandler.methodCallHandler);
     debugPrint("flutter_bridge FlutterChannel init");
@@ -22,5 +23,4 @@ class FlutterChannel {
   Future<T?> invokeMethod<T>(String method, [dynamic arguments]) {
     return delegate.invokeMethod<T>(method, arguments);
   }
-
 }

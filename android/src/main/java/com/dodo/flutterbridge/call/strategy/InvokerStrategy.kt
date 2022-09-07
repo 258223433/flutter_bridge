@@ -3,7 +3,6 @@ package com.dodo.flutterbridge.call.strategy
 import com.dodo.flutterbridge.call.InvokeAttachable
 import com.dodo.flutterbridge.call.exception.InvokerNotFoundException
 import io.flutter.plugin.common.MethodChannel
-import kotlin.jvm.Throws
 
 /**
  *     author : liuduo
@@ -12,7 +11,7 @@ import kotlin.jvm.Throws
  *     desc   : invoker的策略
  *     version: 1.0
  */
-interface InvokerStrategy<P> : InvokeAttachable<P>{
+interface InvokerStrategy<P> : InvokeAttachable<P> {
 
     /**
      * invoker的策略

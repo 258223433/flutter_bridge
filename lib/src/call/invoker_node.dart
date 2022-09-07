@@ -8,7 +8,6 @@ import 'package:flutter_bridge/src/call/strategy/invoker_strategy.dart';
 ///   desc   : 可以向上传递的invoker节点
 ///   version: 1.0
 mixin InvokerNode<S, P> implements InvokeAttachable<P>, Invoker<S> {
-
   ///invoker策略
   abstract InvokerStrategy<P> invokerStrategy;
 
@@ -19,12 +18,12 @@ mixin InvokerNode<S, P> implements InvokeAttachable<P>, Invoker<S> {
   }
 
   @override
-  void attachInvoker(Invoker<P> invoker){
+  void attachInvoker(Invoker<P> invoker) {
     invokerStrategy.attachInvoker(invoker);
   }
 
   @override
-  detachInvoker(Invoker<P> invoker){
+  detachInvoker(Invoker<P> invoker) {
     invokerStrategy.detachInvoker(invoker);
   }
 

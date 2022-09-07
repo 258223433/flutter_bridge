@@ -2,8 +2,6 @@ package com.dodo.flutterbridge;
 
 import androidx.annotation.NonNull;
 
-import com.idlefish.flutterboost.FlutterBoostPlugin;
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
 /**

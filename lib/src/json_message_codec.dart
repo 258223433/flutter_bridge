@@ -42,8 +42,8 @@ class JsonMessageCodec extends StandardMessageCodec {
 
 class JsonString {
   String jsonString;
-  JsonString(this.jsonString);
 
+  JsonString(this.jsonString);
 
   @override
   String toString() {

@@ -9,11 +9,11 @@ package com.dodo.flutterbridge.common
  */
 object Constant {
 
-    object Channel{
+    object Channel {
         const val GLOBAL_FLUTTER_CHANNEL_NAME = "com.dodo.flutterbridge.global_flutter_channel"
     }
 
-    object Method{
+    object Method {
         const val FLUTTER_CHANNEL_METHOD_READY = "com.dodo.flutterbridge.method_ready"
     }
 

@@ -5,11 +5,11 @@ import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import com.dodo.flutterbridge.call.*
+import com.dodo.flutterbridge.call.CallLeaf
+import com.dodo.flutterbridge.call.Disposable
 import com.dodo.flutterbridge.call.strategy.InvokerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy.ConflictType.Replace
-import io.flutter.plugin.common.MethodChannel
 
 /**
  *     author : liuduo
@@ -23,7 +23,7 @@ class FlutterLiveData<T : Any>(
     clazz: Class<T>,
     owner: LifecycleOwner? = null,
     override val invokerStrategy: InvokerStrategy<T> = SingleInvokerStrategy(Replace)
-) : LiveData<T>(), CallLeaf<T, T>,Disposable, InvokerStrategy<T> by invokerStrategy {
+) : LiveData<T>(), CallLeaf<T, T>, Disposable, InvokerStrategy<T> by invokerStrategy {
 
 
     private val parent = DataNamedCallNode.create(name, clazz)

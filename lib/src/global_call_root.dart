@@ -30,15 +30,14 @@ class GlobalCallRoot
     debugPrint("flutter_bridge methodCallHandler");
     try {
       return super.onCall(call);
-    }on HandlerNotFoundException{
+    } on HandlerNotFoundException {
       throw MissingPluginException();
     } on MutableHandlerException {
       return Future.value(defaultResult);
     }
   }
 
-
-  GlobalCallRoot(){
+  GlobalCallRoot() {
     linkChild(DataCallNode.instance());
     linkChild(FunctionCallNode.instance());
   }

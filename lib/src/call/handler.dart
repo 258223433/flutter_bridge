@@ -6,7 +6,6 @@ import 'package:flutter_bridge/src/call/named.dart';
 ///   desc   : 可以接收数据并返回结果的handler
 ///   version: 1.0
 abstract class Handler<P> implements Named {
-
   ///接收数据并返回结果
   Future<dynamic> onCall(P data);
 }
