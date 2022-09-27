@@ -14,25 +14,6 @@ A new Flutter plugin make flutter better to use!
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*.{h,m,mm}'
 
-#   s.public_header_files =
-#     'Classes/GYEFlutterBridge.h',
-#     'Classes/GYEFlutterBridgeConfig.h',
-#     'Classes/GYEFlutterChannelManager.h',
-#     'Classes/GYEFlutterApiCodecReaderWriter.h',
-#     'Classes/GYEFlutterMethodName.h',
-#     'Classes/GYEMethodCallNotify.h',
-#     'Classes/GYEOnCallObserverManager.h',
-#     'Classes/GYEOnCallObserverWrapper.h',
-#     'Classes/GYEStickinessManager.h',
-#     'Classes/GYEFlutterBoostRouteOptions.h',
-#     'Classes/GYEFBFlutterViewContainer.h',
-#     'Classes/GYEBaseLiveData.h',
-#
-#
-#
-#     'Classes/FlutterBridgePlugin.h'
-
-    
   s.dependency 'Flutter'
   s.dependency 'MJExtension'
   s.dependency 'flutter_boost'

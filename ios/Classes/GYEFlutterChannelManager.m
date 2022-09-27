@@ -78,9 +78,14 @@ NSString *const kGlobbalFlutterChannelName = @"com.dodo.flutterbridge.global_flu
                 // 方法回调，单次响应
                 GYEOnCallObserverWrapper *observerWrapper = [[GYEOnCallObserverManager share] getValueWithMethodName:name];
                 if (observerWrapper && observerWrapper.callbackBlock) {
-                    observerWrapper.callbackBlock(call.arguments);
-                }
-                result(nil);
+                    //observerWrapper.callbackBlock(call.arguments);
+                    GYEMethodCallNotify *noti = [[GYEMethodCallNotify alloc] initWithMethodName:name arguments:call.arguments];
+                    noti.result = result;
+                    observerWrapper.callbackBlock(noti);
+                } else {
+                     result(nil);
+                 }
+                //result(nil);
             } else {
                 result(FlutterMethodNotImplemented);
             }

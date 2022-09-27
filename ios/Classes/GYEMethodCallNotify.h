@@ -6,6 +6,7 @@
 //  原生和flutter消息体
 
 #import <Foundation/Foundation.h>
+#import <flutter_boost/FlutterBoost.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,6 +27,8 @@ typedef  void (^GYELiveDataResult)(GYEMethodCallNotify *notify);
 
 /// 是否来自粘性数据
 @property(nonatomic, assign) Boolean stick;
+
+@property(copy, nonatomic) FlutterResult result;
 
 @end
 
