@@ -14,6 +14,10 @@ import com.dodo.flutterbridge.example.databinding.ActivityMainBinding
 import com.dodo.flutterbridge.function.FlutterFunction
 import com.dodo.flutterbridge.function.FlutterHandler
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.flow.flowOf
+import rx.Observable
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,8 +51,7 @@ class MainActivity : AppCompatActivity() {
                 .navigate()
 
             val handler = FlutterHandler("flutterInvoke", Int::class.java) {
-                Toast.makeText(applicationContext,it.toString(),Toast.LENGTH_SHORT).show()
-                return@FlutterHandler it.plus(1)
+                return@FlutterHandler flowOf(it.plus(1))
             }
 //
 //            handler.dispose()

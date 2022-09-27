@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bridge/flutter_bridge.dart';
 import 'package:flutter_boost/flutter_boost.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class UserInfo {
@@ -208,7 +209,7 @@ class SimplePage extends StatelessWidget {
                       return TextButton(
                         onPressed: () {
                           NativeFunction<int>("flutterInvoke").invoke(notifier.value!.count)
-                              .then((value) => debugPrint('bridge example flutterInvoke result:$value'));
+                              .then((value) => Fluttertoast.showToast(msg: value.toString()));
                         },
                         child: const Text('flutterInvoke'),
                       );

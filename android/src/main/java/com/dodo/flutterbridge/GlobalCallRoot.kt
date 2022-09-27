@@ -1,5 +1,6 @@
 package com.dodo.flutterbridge
 
+import com.dodo.flutterbridge.call.CallAdapter
 import com.dodo.flutterbridge.call.CallRoot
 import com.dodo.flutterbridge.call.HandlerNode.StrategyData
 import com.dodo.flutterbridge.call.exception.HandlerNotFoundException
@@ -49,7 +50,7 @@ internal object GlobalCallRoot : CallRoot<FlutterCallInfo, MethodCall>,
      */
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
-            result.success(super.onCall(call))
+            CallAdapter.onCallAdapter(super.onCall(call), result)
         } catch (e: HandlerNotFoundException) {
             result.notImplemented()
         } catch (e: MutableHandlerException) {
