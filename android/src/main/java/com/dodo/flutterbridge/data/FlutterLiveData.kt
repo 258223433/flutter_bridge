@@ -20,7 +20,7 @@ import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy.ConflictType.R
  */
 class FlutterLiveData<T : Any>(
     override val name: String,
-    clazz: Class<T>,
+    clazz: Class<T>? = null,
     owner: LifecycleOwner? = null,
     override val invokerStrategy: InvokerStrategy<T> = SingleInvokerStrategy(Replace)
 ) : LiveData<T>(), CallLeaf<T, T>, Disposable, InvokerStrategy<T> by invokerStrategy {

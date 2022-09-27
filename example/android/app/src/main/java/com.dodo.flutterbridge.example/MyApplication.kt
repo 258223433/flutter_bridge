@@ -20,7 +20,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         FlutterBridge.init(this) {
-            count = FlutterLiveData("count", UserInfo::class.java)
+            count = FlutterLiveData("count", clazz = UserInfo::class.java)
             thread {
                 repeat(10) {
                     Thread.sleep(1000)

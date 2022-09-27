@@ -5,6 +5,7 @@ import com.dodo.flutterbridge.call.HandlerNode
 import com.dodo.flutterbridge.call.strategy.HandlerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleHandlerStrategy.ConflictType.Replace
+import com.dodo.flutterbridge.convertFromJson
 import com.dodo.flutterbridge.model.FlutterCallInfo
 
 /**
@@ -16,7 +17,7 @@ import com.dodo.flutterbridge.model.FlutterCallInfo
  */
 class FunctionNamedHandlerNode<T> private constructor(
     override val name: String,
-    private val clazz: Class<T>
+    private val clazz: Class<T>? = null
 ) : HandlerNode<T, FlutterCallInfo> {
 
     override val handlerStrategy: HandlerStrategy<T> = SingleHandlerStrategy(Replace)
@@ -34,7 +35,7 @@ class FunctionNamedHandlerNode<T> private constructor(
          * @param clazz Class<T>
          * @return FunctionNamedHandlerNode<T>
          */
-        fun <T> create(name: String, clazz: Class<T>): FunctionNamedHandlerNode<T> {
+        fun <T> create(name: String, clazz: Class<T>?): FunctionNamedHandlerNode<T> {
             if (namedGroups[name] == null) {
                 namedGroups[name] = FunctionNamedHandlerNode(name, clazz)
             }
@@ -51,10 +52,8 @@ class FunctionNamedHandlerNode<T> private constructor(
      */
     @Suppress("UNCHECKED_CAST")
     override fun decodeData(data: FlutterCallInfo): HandlerNode.StrategyData<T> {
-        var rawData = data.data
-        if (rawData is JsonMessageCodec.JsonString) {
-            rawData = rawData.fromJson(clazz)
-        }
+        val rawData = data.data.convertFromJson(clazz)
+
         return HandlerNode.StrategyData(
             data.methodInfo.name,
             false,

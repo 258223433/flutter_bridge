@@ -50,26 +50,11 @@ class MainActivity : AppCompatActivity() {
                 .arguments(arguments)
                 .navigate()
 
-            val handler = FlutterHandler("flutterInvoke", Int::class.java) {
+            val handler = FlutterHandler<Int>("flutterInvoke") {
                 return@FlutterHandler flowOf(it.plus(1))
             }
 //
 //            handler.dispose()
-//
-//            FlutterFunction<Int>("functionTest").invoke(1, object : MethodChannel.Result {
-//                override fun success(result: Any?) {
-//                    assert(result==4)
-//                }
-//
-//                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-//                    TODO("Not yet implemented")
-//                }
-//
-//                override fun notImplemented() {
-//                    TODO("Not yet implemented")
-//                }
-//
-//            })
         }
     }
 

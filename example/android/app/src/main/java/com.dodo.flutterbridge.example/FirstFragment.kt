@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.dodo.flutterbridge.example.databinding.FragmentFirstBinding
 import com.dodo.flutterbridge.function.FlutterFunction
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -38,20 +41,25 @@ class FirstFragment : Fragment() {
 
         binding.buttonFirst.setOnClickListener {
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-            FlutterFunction<Int>("nativeInvoke").invoke(1, object : MethodChannel.Result {
-                override fun success(result: Any?) {
-                    Toast.makeText(requireContext(),result.toString(),Toast.LENGTH_SHORT).show()
+//            FlutterFunction<Int,Int>("nativeInvoke",Int::class.java).invoke(1, object : MethodChannel.Result {
+//                override fun success(result: Any?) {
+//                    Toast.makeText(requireContext(),result.toString(),Toast.LENGTH_SHORT).show()
+//                }
+//
+//                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+//                    Toast.makeText(requireContext(),errorMessage,Toast.LENGTH_SHORT).show()
+//                }
+//
+//                override fun notImplemented() {
+//                    Toast.makeText(requireContext(),"notImplemented",Toast.LENGTH_SHORT).show()
+//                }
+//
+//            })
+            lifecycleScope.launch {
+                FlutterFunction<Int,Int>("nativeInvoke").invokeFlow(1).collect {
+                    Toast.makeText(requireContext(),it.toString(),Toast.LENGTH_SHORT).show()
                 }
-
-                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                    Toast.makeText(requireContext(),errorMessage,Toast.LENGTH_SHORT).show()
-                }
-
-                override fun notImplemented() {
-                    Toast.makeText(requireContext(),"notImplemented",Toast.LENGTH_SHORT).show()
-                }
-
-            })
+            }
         }
     }
 

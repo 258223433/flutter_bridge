@@ -10,6 +10,7 @@ import com.dodo.flutterbridge.call.strategy.InvokerStrategy
 import com.dodo.flutterbridge.call.strategy.MutableHandlerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy
 import com.dodo.flutterbridge.call.strategy.SingleInvokerStrategy.ConflictType.Exception
+import com.dodo.flutterbridge.convertFromJson
 import com.dodo.flutterbridge.model.FlutterCallInfo
 import com.dodo.flutterbridge.model.FlutterMethodInfo
 import io.flutter.plugin.common.MethodChannel
@@ -23,7 +24,7 @@ import io.flutter.plugin.common.MethodChannel
  */
 class DataNamedCallNode<T> private constructor(
     override val name: String,
-    private val clazz: Class<T>,
+    private val clazz: Class<T>? = null,
 ) : CallNode<T, FlutterCallInfo> {
 
     override val handlerStrategy: HandlerStrategy<T> = MutableHandlerStrategy()
@@ -43,7 +44,7 @@ class DataNamedCallNode<T> private constructor(
          * @param clazz Class<T>
          * @return DataNamedCallNode<T>
          */
-        fun <T> create(name: String, clazz: Class<T>): DataNamedCallNode<T> {
+        fun <T> create(name: String, clazz: Class<T>?): DataNamedCallNode<T> {
             if (namedGroups[name] == null) {
                 namedGroups[name] = DataNamedCallNode(name, clazz)
             }
@@ -66,10 +67,8 @@ class DataNamedCallNode<T> private constructor(
      */
     @Suppress("UNCHECKED_CAST")
     override fun decodeData(data: FlutterCallInfo): HandlerNode.StrategyData<T> {
-        var rawData = data.data
-        if (rawData is JsonMessageCodec.JsonString) {
-            rawData = rawData.fromJson(clazz)
-        }
+        val rawData = data.data.convertFromJson(clazz)
+
         return HandlerNode.StrategyData(
             data.methodInfo.name,
             true,

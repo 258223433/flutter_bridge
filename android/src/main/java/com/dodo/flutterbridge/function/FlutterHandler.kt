@@ -12,7 +12,7 @@ import com.dodo.flutterbridge.call.Handler
  */
 class FlutterHandler<T>(
     override val name: String,
-    clazz: Class<T>,
+    clazz: Class<T>? = null,
     private val onCall: (T) -> Any
 ) : Handler<T>, Disposable {
 
