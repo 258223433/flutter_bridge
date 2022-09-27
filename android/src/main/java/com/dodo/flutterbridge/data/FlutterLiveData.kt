@@ -67,14 +67,14 @@ class FlutterLiveData<T : Any>(
         unlinkParent(parent)
     }
 
-    override fun onCall(data: T): Any? {
+    override fun onCall(data: T): Any {
         Log.d("dodo", "FlutterLiveData onCall:${Thread.currentThread()}->$data")
         if (Looper.getMainLooper().thread == Thread.currentThread()) {
             super.setValue(data)
         } else {
             super.postValue(data)
         }
-        return null
+        return Any()
     }
 
     override fun encodeData(data: T): T = data

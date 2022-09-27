@@ -21,5 +21,5 @@ interface Handler<P> : Named {
      * @throws MutableHandlerException
      */
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
-    fun onCall(data: P): Any?
+    fun onCall(data: P): Any
 }

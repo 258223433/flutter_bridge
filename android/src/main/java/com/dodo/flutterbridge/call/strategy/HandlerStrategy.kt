@@ -23,5 +23,5 @@ interface HandlerStrategy<S> : Handleable<S> {
      * @throws MutableHandlerException
      */
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
-    fun onCallStrategy(name: String, sticky: Boolean, data: S): Any?
+    fun onCallStrategy(name: String, sticky: Boolean, data: S): Any
 }

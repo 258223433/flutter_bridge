@@ -33,7 +33,7 @@ class SingleHandlerStrategy<A>(
     }
 
     @Throws(HandlerNotFoundException::class)
-    override fun onCallStrategy(name: String, data: A): Any? {
+    override fun onCallStrategy(name: String, data: A): Any {
         return handlers[name]?.run {
             return onCall(data)
         } ?: throw  HandlerNotFoundException()

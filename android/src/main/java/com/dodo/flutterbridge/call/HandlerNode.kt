@@ -15,7 +15,7 @@ interface HandlerNode<S, P> : Handleable<S>, Handler<P> {
     val handlerStrategy: HandlerStrategy<S>
 
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
-    override fun onCall(data: P): Any? {
+    override fun onCall(data: P): Any {
         val decodeData = decodeData(data)
         return handlerStrategy.onCallStrategy(decodeData.name, decodeData.sticky, decodeData.data)
     }

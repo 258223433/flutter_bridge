@@ -13,7 +13,7 @@ import com.dodo.flutterbridge.call.Handler
 class FlutterHandler<T>(
     override val name: String,
     clazz: Class<T>,
-    private val onCall: (T) -> Any?
+    private val onCall: (T) -> Any
 ) : Handler<T>, Disposable {
 
     private val parent = FunctionNamedHandlerNode.create(name, clazz)
@@ -22,7 +22,7 @@ class FlutterHandler<T>(
         parent.addHandler(this)
     }
 
-    override fun onCall(data: T): Any? {
+    override fun onCall(data: T): Any {
         return this.onCall.invoke(data)
     }
 

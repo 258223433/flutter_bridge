@@ -37,7 +37,7 @@ class MutableHandlerStrategy<A> : StickyHandlerStrategy<A>() {
     }
 
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
-    override fun onCallStrategy(name: String, data: A): Any? {
+    override fun onCallStrategy(name: String, data: A): Any {
         val list = handlers[name]
         if (list.isNullOrEmpty()) {
             throw HandlerNotFoundException()

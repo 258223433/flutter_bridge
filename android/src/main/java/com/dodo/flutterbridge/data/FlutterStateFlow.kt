@@ -64,9 +64,9 @@ class FlutterStateFlow<T : Any>(
         Log.d("dodo", "dispose")
     }
 
-    override fun onCall(data: T): Any? {
+    override fun onCall(data: T): Any {
         delegate.value = value
-        return null
+        return Any()
     }
 
     override fun encodeData(data: T): T = data

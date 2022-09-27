@@ -25,7 +25,7 @@ abstract class StickyHandlerStrategy<A> : HandlerStrategy<A> {
 
     @CallSuper
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
-    override fun onCallStrategy(name: String, sticky: Boolean, data: A): Any? {
+    override fun onCallStrategy(name: String, sticky: Boolean, data: A): Any {
         if (sticky) {
             stickyData[name] = data
         }
@@ -33,5 +33,5 @@ abstract class StickyHandlerStrategy<A> : HandlerStrategy<A> {
     }
 
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
-    abstract fun onCallStrategy(name: String, data: A): Any?
+    abstract fun onCallStrategy(name: String, data: A): Any
 }
