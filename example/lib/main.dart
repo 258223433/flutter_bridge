@@ -208,7 +208,7 @@ class SimplePage extends StatelessWidget {
                     builder: (context, notifier, child) {
                       return TextButton(
                         onPressed: () {
-                          NativeFunction<int>("flutterInvoke").invoke(notifier.value!.count)
+                          NativeFunction<int,int>("flutterInvoke").invoke(notifier.value!.count)
                               .then((value) => Fluttertoast.showToast(msg: value.toString()));
                         },
                         child: const Text('flutterInvoke'),

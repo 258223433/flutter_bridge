@@ -10,7 +10,7 @@ import 'package:flutter_bridge/src/json_message_codec.dart';
 ///   time   : 2022/08/18
 ///   desc   : 可以和native交互的function
 ///   version: 1.0
-class NativeFunction<T> with InvokerNode<T, T> implements Disposable {
+class NativeFunction<T,R> with InvokerNode<T, T> implements Disposable {
   @override
   InvokerStrategy<T> invokerStrategy =
       SingleInvokerStrategy(SingleInvokerConflictType.replace);
@@ -25,7 +25,7 @@ class NativeFunction<T> with InvokerNode<T, T> implements Disposable {
   @override
   String name;
 
-  FromJson? _fromJson;
+  FromJson<R>? _fromJson;
 
   @override
   T encodeData(T data) => data;
@@ -36,8 +36,8 @@ class NativeFunction<T> with InvokerNode<T, T> implements Disposable {
   }
 
   @override
-  Future<dynamic> invoke(T data) async {
+  Future<R> invoke(T data) async {
     var res = await super.invoke(data);
-    return (res as Object?).convertFromJson(_fromJson);
+    return (res as Object?).convertFromJson(_fromJson) as R;
   }
 }
