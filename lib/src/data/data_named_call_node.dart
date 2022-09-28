@@ -55,10 +55,7 @@ class DataNamedCallNode<T>
 
   @override
   StrategyData<T> decodeData(FlutterCallInfo data) {
-    var rawData = data.data;
-    if (rawData is JsonString) {
-      rawData = _fromJson!(json.decode(rawData.jsonString));
-    }
+    var rawData = (data.data as Object?).convertFromJson(_fromJson);
     return StrategyData(data.methodInfo.name, true, rawData as T);
   }
 

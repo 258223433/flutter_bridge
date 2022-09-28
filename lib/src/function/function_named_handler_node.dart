@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter_bridge/src/call/handler_node.dart';
 import 'package:flutter_bridge/src/call/strategy/handler_strategy.dart';
 import 'package:flutter_bridge/src/call/strategy/single_handler_strategy.dart';
@@ -39,10 +37,7 @@ class FunctionNamedHandlerNode<T> with HandlerNode<T, FlutterCallInfo> {
 
   @override
   StrategyData<T> decodeData(FlutterCallInfo data) {
-    var rawData = data.data;
-    if (rawData is JsonString) {
-      rawData = _fromJson!(json.decode(rawData.jsonString));
-    }
+    var rawData = (data.data as Object?).convertFromJson(_fromJson);
     return StrategyData(data.methodInfo.name, false, rawData as T);
   }
 }

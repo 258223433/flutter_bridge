@@ -3,6 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bridge/src/json_message_codec.dart';
+import 'package:flutter_bridge/src/json_message_codec.dart';
 
 ///   author : liuduo
 ///   e-mail : liuduo@gyenno.com
@@ -52,3 +54,13 @@ class JsonString {
 }
 
 typedef FromJson<T> = T Function(Map<String, dynamic> json);
+
+extension ConvertFromJsonObject on Object? {
+  Object? convertFromJson(FromJson? fromJson) {
+    var rawData = this;
+    if (rawData is JsonString) {
+      rawData = fromJson!(json.decode(rawData.jsonString));
+    }
+    return rawData;
+  }
+}
