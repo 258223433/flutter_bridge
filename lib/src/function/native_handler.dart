@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bridge/src/call/disposable.dart';
 import 'package:flutter_bridge/src/call/handler.dart';
 import 'package:flutter_bridge/src/function/function_named_handler_node.dart';
@@ -19,6 +20,7 @@ class NativeHandler<T> implements Handler<T>, Disposable {
   @override
   void dispose() {
     _parent.removeHandler(this);
+    debugPrint('NativeHandler dispose');
   }
 
   @override

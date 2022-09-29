@@ -8,8 +8,9 @@ import 'package:flutter_bridge/src/flutter_bridge_app.dart';
 import 'package:flutter_bridge/src/flutter_channel.dart';
 import 'package:flutter_bridge/src/flutter_context.dart';
 
-export 'src/data/native_data.dart';
 export 'src/flutter_bridge_app.dart';
+export 'src/widget/call_provider.dart';
+export 'src/data/native_data.dart';
 export 'src/function/native_function.dart';
 export 'src/function/native_handler.dart';
 

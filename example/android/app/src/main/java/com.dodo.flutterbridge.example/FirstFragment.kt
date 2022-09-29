@@ -12,6 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import com.dodo.flutterbridge.example.databinding.FragmentFirstBinding
 import com.dodo.flutterbridge.function.FlutterFunction
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -36,6 +38,8 @@ class FirstFragment : Fragment() {
 
     }
 
+    private var hasLoop = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,9 +59,19 @@ class FirstFragment : Fragment() {
 //                }
 //
 //            })
-            lifecycleScope.launch {
-                FlutterFunction<Int,Int>("nativeInvoke").invokeFlow(1).collect {
-                    Toast.makeText(requireContext(),it.toString(),Toast.LENGTH_SHORT).show()
+            if (!hasLoop) {
+                hasLoop = true
+                lifecycleScope.launch {
+                    repeat(10000) {
+                        FlutterFunction<Int, Int>("nativeInvoke").invokeFlow(1).catch { e ->
+                            Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_SHORT)
+                                .show()
+                        }.collect {
+                            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        delay(5000)
+                    }
                 }
             }
         }

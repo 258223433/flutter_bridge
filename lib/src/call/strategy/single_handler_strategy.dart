@@ -34,7 +34,7 @@ class SingleHandlerStrategy<A> extends StickyHandlerStrategy<A> {
 
   @override
   void removeHandler(Handler<A> handler) {
-    _handlers[handler.name] = handler;
+    _handlers.remove(handler.name);
   }
 }
 

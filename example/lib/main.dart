@@ -164,21 +164,29 @@ class SimplePage extends StatelessWidget {
 
   SimplePage({required this.data});
 
-
-
   @override
   Widget build(BuildContext context) {
-    NativeHandler<int>("nativeInvoke",(data)async => data+1);
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ChangeNotifierProvider<NativeData<UserInfo?>>(
-              create: (_) => NativeData("count", null, (json) {
-                return UserInfo.fromJson(json);
-              }),
-              child: Column(
+    return MultiProvider(
+      providers: [
+        CallProvider(
+          create: (_) => NativeFunction<int, int>("flutterInvoke"),
+        ),
+        CallProvider(
+          create: (_) =>
+              NativeHandler<int>("nativeInvoke", (data) async => data + 1),
+        ),
+        ChangeNotifierProvider<NativeData<UserInfo?>>(
+          create: (_) => NativeData("count", null, (json) {
+            return UserInfo.fromJson(json);
+          }),
+        ),
+      ],
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
                 children: [
                   Consumer<NativeData<UserInfo?>>(
                     builder: (context, notifier, child) {
@@ -195,7 +203,7 @@ class SimplePage extends StatelessWidget {
                       return TextButton(
                         onPressed: () {
                           if (notifier.value != null) {
-                            var value  = notifier.value!;
+                            var value = notifier.value!;
                             var count = value.count + 100;
                             notifier.value = UserInfo(value.name, count);
                           }
@@ -206,28 +214,31 @@ class SimplePage extends StatelessWidget {
                   ),
                   Consumer<NativeData<UserInfo?>>(
                     builder: (context, notifier, child) {
-                      return TextButton(
-                        onPressed: () {
-                          NativeFunction<int,int>("flutterInvoke").invoke(notifier.value!.count)
-                              .then((value) => Fluttertoast.showToast(msg: value.toString()));
-                        },
-                        child: const Text('flutterInvoke'),
-                      );
+                      return Consumer<NativeFunction<int, int>>(
+                          builder: (context, function, child) {
+                        return TextButton(
+                          onPressed: () {
+                            function.invoke(notifier.value!.count).then(
+                                (value) => Fluttertoast.showToast(
+                                    msg: value.toString()));
+                          },
+                          child: const Text('flutterInvoke'),
+                        );
+                      });
                     },
                   ),
                 ],
               ),
-            ),
-            Text('SimplePage $data'),
-            TextButton(
-              onPressed: () {
-                BoostNavigator.instance
-                    .push("mainActivity")
-                    .then((value) => debugPrint('bridge example onResult:$value'));
-              },
-              child: const Text('Next'),
-            ),
-          ],
+              Text('SimplePage $data'),
+              TextButton(
+                onPressed: () {
+                  BoostNavigator.instance.push("mainActivity").then(
+                      (value) => debugPrint('bridge example onResult:$value'));
+                },
+                child: const Text('Next'),
+              ),
+            ],
+          ),
         ),
       ),
     );
