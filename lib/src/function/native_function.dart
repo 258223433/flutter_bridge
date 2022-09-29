@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bridge/src/call/disposable.dart';
 import 'package:flutter_bridge/src/call/invoker_node.dart';
 import 'package:flutter_bridge/src/call/strategy/invoker_strategy.dart';
@@ -25,7 +26,7 @@ class NativeFunction<T,R> with InvokerNode<T, T> implements Disposable {
   @override
   String name;
 
-  FromJson<R>? _fromJson;
+  final FromJson<R>? _fromJson;
 
   @override
   T encodeData(T data) => data;
@@ -33,6 +34,7 @@ class NativeFunction<T,R> with InvokerNode<T, T> implements Disposable {
   @override
   void dispose() {
     detachInvoker(_parent);
+    debugPrint('NativeFunction dispose');
   }
 
   @override
