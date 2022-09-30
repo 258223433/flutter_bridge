@@ -38,8 +38,8 @@ class NativeFunction<T,R> with InvokerNode<T, T> implements Disposable {
   }
 
   @override
-  Future<R> invoke(T data) async {
-    var res = await super.invoke(data);
+  Future<R> invoke([T? data]) async {
+    var res = await super.invoke(data as T);
     return (res as Object?).convertFromJson(_fromJson) as R;
   }
 }
