@@ -36,7 +36,7 @@ internal object GlobalCallRoot : CallRoot<FlutterCallInfo, MethodCall>,
     /**
      * 虽然flutter里面定义了null的类型,但是[StandardMessageCodec.writeValue]中写入数据为非空,所以这里定义一个默认的返回值
      */
-    private const val defaultResult = "null"
+    private const val nullResult = Constant.Value.FLUTTER_CHANNEL_VALUE_NULL
 
     init {
         linkChild(DataCallNode)
@@ -50,11 +50,12 @@ internal object GlobalCallRoot : CallRoot<FlutterCallInfo, MethodCall>,
      */
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
-            CallAdapter.onCallAdapter(super.onCall(call), result)
+            val methodCall = MethodCall(call.method, call.arguments.fromIfNull())
+            CallAdapter.onCallAdapter(super.onCall(methodCall).toIfNull(), result)
         } catch (e: HandlerNotFoundException) {
             result.notImplemented()
         } catch (e: MutableHandlerException) {
-            result.success(defaultResult)
+            result.success(null.toIfNull())
         }
     }
 
@@ -65,7 +66,40 @@ internal object GlobalCallRoot : CallRoot<FlutterCallInfo, MethodCall>,
      */
     override fun invoke(data: FlutterCallInfo, callback: MethodChannel.Result?) {
         val methodCall = data.toMethodCall()
-        FlutterContext.globalChannel.invokeMethod(methodCall.method, methodCall.arguments, callback)
+        FlutterContext.globalChannel.invokeMethod(
+            methodCall.method,
+            methodCall.arguments.toIfNull(),
+            object : MethodChannel.Result {
+                override fun success(result: Any?) {
+                    callback?.success(result.fromIfNull())
+                }
+
+                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                    callback?.error(
+                        errorCode, errorMessage,
+                        errorDetails.fromIfNull()
+                    )
+                }
+
+                override fun notImplemented() {
+                    callback?.notImplemented()
+                }
+            }
+        )
+    }
+
+    internal fun Any?.fromIfNull(): Any? {
+        if (this == nullResult) {
+            return null
+        }
+        return this
+    }
+
+    internal fun Any?.toIfNull(): Any {
+        if (this == null) {
+            return nullResult
+        }
+        return this
     }
 
     override fun decodeData(data: MethodCall): StrategyData<FlutterCallInfo> {

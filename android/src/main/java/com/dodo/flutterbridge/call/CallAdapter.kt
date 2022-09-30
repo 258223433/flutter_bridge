@@ -1,5 +1,6 @@
 package com.dodo.flutterbridge.call
 
+import com.dodo.flutterbridge.GlobalCallRoot.toIfNull
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
@@ -31,7 +32,7 @@ object CallAdapter {
                         if (exception is CancellationException && cause != null) {
                             originalException = cause
                         }
-                        result.error("0", originalException.message, null)
+                        result.error("0", originalException.message, null.toIfNull())
                     }.collect {
                         result.success(it)
                     }
@@ -41,7 +42,7 @@ object CallAdapter {
                 callResult.subscribe(object : Observer<Any> {
 
                     override fun onError(e: Throwable?) {
-                        result.error("1", e?.message, null)
+                        result.error("1", e?.message, null.toIfNull())
                     }
 
                     override fun onNext(t: Any?) {

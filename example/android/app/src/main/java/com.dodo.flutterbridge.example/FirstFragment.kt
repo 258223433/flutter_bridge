@@ -63,7 +63,7 @@ class FirstFragment : Fragment() {
                 hasLoop = true
                 lifecycleScope.launch {
                     repeat(10000) {
-                        FlutterFunction<Int, Int>("nativeInvoke").invokeFlow(1).catch { e ->
+                        FlutterFunction<Int?, Int?>("nativeInvoke").invokeFlow(null).catch { e ->
                             Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_SHORT)
                                 .show()
                         }.collect {

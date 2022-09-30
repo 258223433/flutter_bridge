@@ -177,8 +177,8 @@ class SimplePage extends StatelessWidget {
           }),
         ),
       ],
-      child: Caller<NativeHandler<int>>(
-        caller: NativeHandler<int>("nativeInvoke", (data) async => data + 1),
+      child: Caller<NativeHandler<int?>>(
+        caller: NativeHandler<int?>("nativeInvoke", (data) async => null),
         builder: (context,caller) {
           return Scaffold(
             body: Center(

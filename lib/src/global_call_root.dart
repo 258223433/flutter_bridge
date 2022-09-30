@@ -24,17 +24,24 @@ class GlobalCallRoot
     with
         HandlerNode<FlutterCallInfo, MethodCall>,
         CallRoot<FlutterCallInfo, MethodCall> {
-  static const String defaultResult = "null";
-
-  Future<dynamic> methodCallHandler(MethodCall call) {
+  Future<dynamic> methodCallHandler(MethodCall call) async {
     debugPrint("flutter_bridge methodCallHandler");
     try {
-      return super.onCall(call);
+      var methodCall = MethodCall(call.method, fromIfNull(call.arguments));
+      return toIfNull(super.onCall(methodCall));
     } on HandlerNotFoundException {
       throw MissingPluginException();
     } on MutableHandlerException {
-      return Future.value(defaultResult);
+      return toIfNull(null);
     }
+  }
+
+  @override
+  Future invoke(FlutterCallInfo data) async {
+    var methodCall = data.toMethodCall();
+    return fromIfNull(FlutterContext.instance()
+        .globalChannel
+        .invokeMethod(methodCall.method, toIfNull(methodCall.arguments)));
   }
 
   GlobalCallRoot() {
@@ -54,14 +61,6 @@ class GlobalCallRoot
     var callInfo = data.toFlutterCallInfo();
     return StrategyData(callInfo.methodInfo.type, true, callInfo);
   }
-
-  @override
-  Future invoke(FlutterCallInfo data) {
-    var methodCall = data.toMethodCall();
-    return FlutterContext.instance()
-        .globalChannel
-        .invokeMethod(methodCall.method, methodCall.arguments);
-  }
 }
 
 extension MethodCallExtension on MethodCall {
@@ -75,4 +74,18 @@ extension FlutterCallInfoExtension on FlutterCallInfo {
   MethodCall toMethodCall() {
     return MethodCall(json.encode(methodInfo.toJson()), data);
   }
+}
+
+dynamic toIfNull(dynamic value) {
+  if (value == null) {
+    return Constant.flutterChannelValueNull;
+  }
+  return value;
+}
+
+dynamic fromIfNull(dynamic value) {
+  if (value == Constant.flutterChannelValueNull) {
+    return null;
+  }
+  return value;
 }

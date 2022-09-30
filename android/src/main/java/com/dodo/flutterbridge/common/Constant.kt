@@ -17,6 +17,10 @@ object Constant {
         const val FLUTTER_CHANNEL_METHOD_READY = "com.dodo.flutterbridge.method_ready"
     }
 
+    object Value {
+        const val FLUTTER_CHANNEL_VALUE_NULL = "com.dodo.flutterbridge.value_null"
+    }
+
     /**
      * name常量
      */

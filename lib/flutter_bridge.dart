@@ -3,6 +3,7 @@ library flutter_bridge;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_boost/flutter_boost.dart';
+import 'package:flutter_bridge/src/common/constant.dart';
 import 'package:flutter_bridge/src/data/native_data.dart';
 import 'package:flutter_bridge/src/flutter_bridge_app.dart';
 import 'package:flutter_bridge/src/flutter_channel.dart';
@@ -25,8 +26,8 @@ class FlutterBridge {
   FlutterBridge init() {
     _FlutterBridgeBinding();
     flutterContext.globalChannel =
-        FlutterChannel(FlutterContext.globalFlutterChannelName);
-    NativeData(FlutterContext.flutterChannelMethodReady, 0);
+        FlutterChannel(Constant.globalFlutterChannelName);
+    NativeData(Constant.flutterChannelMethodReady, 0);
     return this;
   }
 
