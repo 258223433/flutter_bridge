@@ -171,75 +171,76 @@ class SimplePage extends StatelessWidget {
         CallProvider(
           create: (_) => NativeFunction<int, int>("flutterInvoke"),
         ),
-        CallProvider(
-          create: (_) =>
-              NativeHandler<int>("nativeInvoke", (data) async => data + 1),
-        ),
         ChangeNotifierProvider<NativeData<UserInfo?>>(
           create: (_) => NativeData("count", null, (json) {
             return UserInfo.fromJson(json);
           }),
         ),
       ],
-      child: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
+      child: Caller<NativeHandler<int>>(
+        caller: NativeHandler<int>("nativeInvoke", (data) async => data + 1),
+        builder: (context,caller) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Consumer<NativeData<UserInfo?>>(
-                    builder: (context, notifier, child) {
-                      return Text("${notifier.value?.name}");
-                    },
-                  ),
-                  Consumer<NativeData<UserInfo?>>(
-                    builder: (context, notifier, child) {
-                      return Text("${notifier.value?.count}");
-                    },
-                  ),
-                  Consumer<NativeData<UserInfo?>>(
-                    builder: (context, notifier, child) {
-                      return TextButton(
-                        onPressed: () {
-                          if (notifier.value != null) {
-                            var value = notifier.value!;
-                            var count = value.count + 100;
-                            notifier.value = UserInfo(value.name, count);
-                          }
+                  Column(
+                    children: [
+                      Consumer<NativeData<UserInfo?>>(
+                        builder: (context, notifier, child) {
+                          return Text("${notifier.value?.name}");
                         },
-                        child: const Text('+100'),
-                      );
-                    },
+                      ),
+                      Consumer<NativeData<UserInfo?>>(
+                        builder: (context, notifier, child) {
+                          return Text("${notifier.value?.count}");
+                        },
+                      ),
+                      Consumer<NativeData<UserInfo?>>(
+                        builder: (context, notifier, child) {
+                          return TextButton(
+                            onPressed: () {
+                              if (notifier.value != null) {
+                                var value = notifier.value!;
+                                var count = value.count + 100;
+                                notifier.value = UserInfo(value.name, count);
+                              }
+                            },
+                            child: const Text('+100'),
+                          );
+                        },
+                      ),
+                      Consumer<NativeData<UserInfo?>>(
+                        builder: (context, notifier, child) {
+                          return Consumer<NativeFunction<int, int>>(
+                              builder: (context, function, child) {
+                                return TextButton(
+                                  onPressed: () {
+                                    function.invoke(notifier.value!.count).then(
+                                            (value) => Fluttertoast.showToast(
+                                            msg: value.toString()));
+                                  },
+                                  child: const Text('flutterInvoke'),
+                                );
+                              });
+                        },
+                      ),
+                    ],
                   ),
-                  Consumer<NativeData<UserInfo?>>(
-                    builder: (context, notifier, child) {
-                      return Consumer<NativeFunction<int, int>>(
-                          builder: (context, function, child) {
-                        return TextButton(
-                          onPressed: () {
-                            function.invoke(notifier.value!.count).then(
-                                (value) => Fluttertoast.showToast(
-                                    msg: value.toString()));
-                          },
-                          child: const Text('flutterInvoke'),
-                        );
-                      });
+                  Text('SimplePage $data'),
+                  TextButton(
+                    onPressed: () {
+                      BoostNavigator.instance.push("mainActivity").then(
+                              (value) => debugPrint('bridge example onResult:$value'));
                     },
+                    child: const Text('Next'),
                   ),
                 ],
               ),
-              Text('SimplePage $data'),
-              TextButton(
-                onPressed: () {
-                  BoostNavigator.instance.push("mainActivity").then(
-                      (value) => debugPrint('bridge example onResult:$value'));
-                },
-                child: const Text('Next'),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        }
       ),
     );
   }
