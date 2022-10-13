@@ -27,9 +27,7 @@ class _CallerWidgetState<T extends Disposable> extends State<Caller<T>> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("build");
     var widget2 = widget.builder(context,widget.caller);
-    debugPrint("build end");
     return widget2;
   }
 
