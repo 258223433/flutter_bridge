@@ -11,14 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.0.3
-#  flutter_boost:
-#    git:
-#      url: 'https://github.com/alibaba/flutter_boost.git'
-#      ref: 'v3.0-null-safety-release.2.2'
   flutter_boost:
     git:
-      url: 'https://github.com/258223433/flutter_boost.git'
-      ref: 'v3.0-null-safety-flutter3.0-release.2.1'
+      url: 'https://github.com/alibaba/flutter_boost.git'
+      ref: 'v3.0-null-safety-release.2.2'
+#  flutter_boost:
+#    git:
+#      url: 'https://github.com/258223433/flutter_boost.git'
+#      ref: 'v3.0-null-safety-flutter3.0-release.2.1'
 
 dev_dependencies:
   flutter_lints: ^1.0.4
