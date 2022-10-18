@@ -76,7 +76,10 @@ class JsonMessageCodec : StandardMessageCodec() {
 internal fun <T> Any?.convertFromJson(clazz: Class<T>?): Any? {
     var rawData = this
     if (rawData is JsonMessageCodec.JsonString) {
-        rawData = rawData.fromJson(clazz!!)
+        if (clazz == null) {
+            throw Exception("类型为JsonString,clazz却为空")
+        }
+        rawData = rawData.fromJson(clazz)
     }
     return rawData
 }

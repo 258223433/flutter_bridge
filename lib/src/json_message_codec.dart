@@ -57,7 +57,10 @@ extension ConvertFromJsonObject on Object? {
   Object? convertFromJson(FromJson? fromJson) {
     var rawData = this;
     if (rawData is JsonString) {
-      rawData = fromJson!(json.decode(rawData.jsonString));
+      if(fromJson == null){
+        throw Exception("类型为JsonString,fromJson却为空");
+      }
+      rawData = fromJson(json.decode(rawData.jsonString));
     }
     return rawData;
   }
