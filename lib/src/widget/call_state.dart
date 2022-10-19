@@ -6,7 +6,7 @@ import 'package:flutter_bridge/src/call/disposable.dart';
 ///   time   : 2022/10/19
 ///   desc   : Caller混合State,用来释放资源
 ///   version: 1.0
-mixin CallState on State {
+mixin CallState<T extends StatefulWidget> on State<T> {
   late final List<Disposable> _disposables;
 
   @override
