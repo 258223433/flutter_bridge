@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-    api project(':flutter_boost')
+    implementation project(':flutter_boost')
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.code.gson:gson:2.6.2'
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.10"

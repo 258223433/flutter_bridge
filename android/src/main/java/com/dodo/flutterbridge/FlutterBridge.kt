@@ -103,6 +103,10 @@ object FlutterBridge {
     fun <F : FlutterBoostFragment> fragment(): FragmentBuilder<F, Nothing> {
         return BaseBuilder.fragment<F>()
     }
+
+    fun currentActivity(): Activity? {
+        return FlutterBoost.instance().currentActivity()
+    }
 }
 
 /**
