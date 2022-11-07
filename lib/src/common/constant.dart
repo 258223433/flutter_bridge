@@ -8,7 +8,6 @@ class Constant {
       "com.dodo.flutterbridge.global_flutter_channel";
   static const flutterChannelMethodReady =
       "com.dodo.flutterbridge.method_ready";
-  static const flutterChannelValueNull = "com.dodo.flutterbridge.value_null";
 
   static const rootName = "root";
   static const typeDataName = "data";

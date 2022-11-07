@@ -20,7 +20,7 @@ class JsonMessageCodec : StandardMessageCodec() {
         private const val JSON: Byte = 64
     }
 
-    override fun writeValue(stream: ByteArrayOutputStream, value: Any) {
+    override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
         try {
             //先尝试使用父类来写数据
             super.writeValue(stream, value)

@@ -16,7 +16,6 @@ import com.dodo.flutterbridge.model.FlutterCallInfo
 import com.dodo.flutterbridge.model.FlutterMethodInfo
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.StandardMessageCodec
 
 /**
  *     author : liuduo
@@ -33,11 +32,6 @@ internal object GlobalCallRoot : CallRoot<FlutterCallInfo, MethodCall>,
     override val handlerStrategy: HandlerStrategy<FlutterCallInfo> =
         SingleHandlerStrategy(Exception)
 
-    /**
-     * 虽然flutter里面定义了null的类型,但是[StandardMessageCodec.writeValue]中写入数据为非空,所以这里定义一个默认的返回值
-     */
-    private const val nullResult = Constant.Value.FLUTTER_CHANNEL_VALUE_NULL
-
     init {
         linkChild(DataCallNode)
         linkChild(FunctionCallNode)
@@ -50,12 +44,12 @@ internal object GlobalCallRoot : CallRoot<FlutterCallInfo, MethodCall>,
      */
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
-            val methodCall = MethodCall(call.method, call.arguments.fromIfNull())
-            CallAdapter.onCallAdapter(super.onCall(methodCall).toIfNull(), result)
+            val methodCall = MethodCall(call.method, call.arguments)
+            CallAdapter.onCallAdapter(super.onCall(methodCall), result)
         } catch (e: HandlerNotFoundException) {
             result.notImplemented()
         } catch (e: MutableHandlerException) {
-            result.success(null.toIfNull())
+            result.success(null)
         }
     }
 
@@ -68,16 +62,16 @@ internal object GlobalCallRoot : CallRoot<FlutterCallInfo, MethodCall>,
         val methodCall = data.toMethodCall()
         FlutterContext.globalChannel.invokeMethod(
             methodCall.method,
-            methodCall.arguments.toIfNull(),
+            methodCall.arguments,
             object : MethodChannel.Result {
                 override fun success(result: Any?) {
-                    callback?.success(result.fromIfNull())
+                    callback?.success(result)
                 }
 
                 override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
                     callback?.error(
                         errorCode, errorMessage,
-                        errorDetails.fromIfNull()
+                        errorDetails
                     )
                 }
 
@@ -86,20 +80,6 @@ internal object GlobalCallRoot : CallRoot<FlutterCallInfo, MethodCall>,
                 }
             }
         )
-    }
-
-    internal fun Any?.fromIfNull(): Any? {
-        if (this == nullResult) {
-            return null
-        }
-        return this
-    }
-
-    internal fun Any?.toIfNull(): Any {
-        if (this == null) {
-            return nullResult
-        }
-        return this
     }
 
     override fun decodeData(data: MethodCall): StrategyData<FlutterCallInfo> {

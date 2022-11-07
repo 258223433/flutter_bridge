@@ -27,21 +27,21 @@ class GlobalCallRoot
   Future<dynamic> methodCallHandler(MethodCall call) async {
     debugPrint("flutter_bridge methodCallHandler");
     try {
-      var methodCall = MethodCall(call.method, fromIfNull(call.arguments));
-      return toIfNull(super.onCall(methodCall));
+      var methodCall = MethodCall(call.method, call.arguments);
+      return super.onCall(methodCall);
     } on HandlerNotFoundException {
       throw MissingPluginException();
     } on MutableHandlerException {
-      return toIfNull(null);
+      return null;
     }
   }
 
   @override
   Future invoke(FlutterCallInfo data) async {
     var methodCall = data.toMethodCall();
-    return fromIfNull(FlutterContext.instance()
+    return FlutterContext.instance()
         .globalChannel
-        .invokeMethod(methodCall.method, toIfNull(methodCall.arguments)));
+        .invokeMethod(methodCall.method, methodCall.arguments);
   }
 
   GlobalCallRoot() {
@@ -74,18 +74,4 @@ extension FlutterCallInfoExtension on FlutterCallInfo {
   MethodCall toMethodCall() {
     return MethodCall(json.encode(methodInfo.toJson()), data);
   }
-}
-
-dynamic toIfNull(dynamic value) {
-  if (value == null) {
-    return Constant.flutterChannelValueNull;
-  }
-  return value;
-}
-
-dynamic fromIfNull(dynamic value) {
-  if (value == Constant.flutterChannelValueNull) {
-    return null;
-  }
-  return value;
 }
