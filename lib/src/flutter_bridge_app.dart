@@ -23,5 +23,6 @@ class FlutterBridgeApp extends FlutterBoostApp {
     super.appBuilder,
     super.initialRoute,
     super.interceptors,
-  }) : super(_routeFactory);
+    FlutterBoostRouteFactory? routeFactory,
+  }) : super(routeFactory??_routeFactory);
 }
