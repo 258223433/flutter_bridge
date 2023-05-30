@@ -60,7 +60,12 @@ extension ConvertFromJsonObject on Object? {
       if(fromJson == null){
         throw Exception("类型为JsonString,fromJson却为空");
       }
-      rawData = fromJson(json.decode(rawData.jsonString));
+      try{
+        rawData = fromJson(json.decode(rawData.jsonString));
+      } catch (e) {
+        debugPrint("fromJson解析失败,原始数据为:$rawData");
+        rethrow;
+      }
     }
     return rawData;
   }
