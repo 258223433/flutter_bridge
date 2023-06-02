@@ -20,3 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.dodo.flutterbridge.model.** { *; }
+-keep class com.idlefish.flutterboost.** { *; }
