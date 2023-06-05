@@ -45,10 +45,6 @@ android {
             minifyEnabled false
             consumerProguardFiles 'proguard-rules.pro'
         }
-        sit{
-            minifyEnabled false
-            consumerProguardFiles 'proguard-rules.pro'
-        }
     }
 }
 
