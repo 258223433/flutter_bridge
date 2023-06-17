@@ -18,6 +18,7 @@ class JsonMessageCodec : StandardMessageCodec() {
     companion object {
         //json数据类型
         private const val JSON: Byte = 64
+        private const val NULL: Byte = 0
     }
 
     override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
