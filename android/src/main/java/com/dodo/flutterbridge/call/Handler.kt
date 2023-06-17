@@ -16,10 +16,11 @@ interface Handler<P> : Named {
     /**
      * 接收数据并返回结果
      * @param data P
-     * @return Any?
+     * @return Any
      * @throws HandlerNotFoundException
      * @throws MutableHandlerException
      */
+    //由于早期版本的Android的StandardMessageCodec不支持写入null,所以没有定义为Any?,但是可以返回Unit来替代
     @Throws(HandlerNotFoundException::class, MutableHandlerException::class)
     fun onCall(data: P): Any
 }

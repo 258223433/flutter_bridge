@@ -25,6 +25,12 @@ class JsonMessageCodec : StandardMessageCodec() {
             //先尝试使用父类来写数据
             super.writeValue(stream, value)
         } catch (e: IllegalArgumentException) {
+            //由于早期版本的Android的StandardMessageCodec不支持写入null,所以我们这里做了兼容
+            //如果是Kotlin的Unit类型的话,直接写入null
+            if (value is Unit){
+                stream.write(NULL.toInt())
+                return
+            }
             //如果父类不支持该类型数据并抛出异常的话,我们来写json类型数据
 
             //先写入json数据的类型
