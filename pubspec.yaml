@@ -1,7 +1,6 @@
 name: flutter_bridge
 description: A Flutter module for interaction between flutter and native.
 version: 0.0.1
-author: dodo
 homepage: https://github.com/258223433/flutter_bridge
 
 environment:
